@@ -1,1 +1,514 @@
-
+{
+  "openapi": "3.0.3",
+  "x-stoplight": {
+    "id": "snkgxctdxuqc9"
+  },
+  "info": {
+    "title": "API horaires",
+    "version": "2.0.0",
+    "description": "Service REST pour les heures d'ouvertures des services de la Direction des bibliothèques, Université de Montréal",
+    "contact": {
+      "name": "Christian Rémillard",
+      "url": "https://github.com/bibudem/api-horaires",
+      "email": "christian.remillard@umontreal.ca"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://raw.githubusercontent.com/bibudem/api-horaires/main/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "À propos"
+    },
+    {
+      "name": "Liste de code de bibliothèque"
+    },
+    {
+      "name": "Horaires"
+    },
+    {
+      "name": "Horaires par bibliothèque"
+    }
+  ],
+  "paths": {
+    "/about": {
+      "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
+    },
+    "/liste": {
+      "get": {
+        "summary": "Retourne la liste des bibliothèques ayant un horaire",
+        "operationId": "getListeBibs",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/BibListResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "description": "Retourne un objet contenant la liste des codes de biblithèques",
+        "tags": [
+          "Liste de code de bibliothèque"
+        ]
+      },
+      "parameters": []
+    },
+    "/{bib}.{format}": {
+      "summary": "Liste les nouvelles acquisitions pour une discipline",
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/HorairesListICSResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/RequestValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "summary": "Retourne un fil RSS de nouvelles acquisitions pour une discipline donné",
+        "description": "Retourne les horaires d'une bibliothèque donnée au format [iCalendar](https://www.rfc-editor.org/rfc/rfc5545.html).",
+        "operationId": "getByBibICS",
+        "tags": [
+          "Horaires par bibliothèque"
+        ]
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "pattern": "ics"
+          },
+          "name": "format",
+          "in": "path",
+          "description": "L'extension de fichier \"ics\"",
+          "required": true
+        },
+        {
+          "$ref": "#/components/parameters/bib"
+        }
+      ]
+    },
+    "/{bib}": {
+      "summary": "Liste les nouvelles acquisitions pour une discipline",
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/HorairesListResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/RequestValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "summary": "Retourne une liste de nouvelles acquisitions pour une discipline donné",
+        "description": "Retourne des horaires pour une bibliothèque donnée.",
+        "operationId": "getByBib",
+        "tags": [
+          "Horaires par bibliothèque"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/bib"
+        }
+      ]
+    },
+    "/": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/debut"
+          },
+          {
+            "$ref": "#/components/parameters/fin"
+          },
+          {
+            "$ref": "#/components/parameters/ouvert"
+          },
+          {
+            "$ref": "#/components/parameters/bibs"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/horaireList"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ICSType"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/RequestValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "operationId": "getHoraire",
+        "summary": "Retourne les horaires",
+        "description": "Trouve des horaires en filtrant par bibliothèque et période.\n",
+        "x-internal": false,
+        "tags": [
+          "Horaires"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "horaire": {
+        "type": "object",
+        "title": "Horaire",
+        "description": "Un objet contenant un horaire d'une bibliothèque ou d'un service",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "bibliotheque": {
+            "type": "string"
+          },
+          "debut1": {
+            "type": "string"
+          },
+          "fin1": {
+            "type": "string"
+          },
+          "debut2": {
+            "type": "string"
+          },
+          "fin2": {
+            "type": "string"
+          },
+          "service": {
+            "type": "string"
+          },
+          "periode": {
+            "type": "string"
+          },
+          "sommaire": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "x-stoplight": {
+          "id": "768f5c6f55e11"
+        }
+      },
+      "horaireList": {
+        "type": "array",
+        "title": "Liste d'horaires",
+        "description": "Une liste d'horaires",
+        "x-stoplight": {
+          "id": "8c28a05e7c7d5"
+        },
+        "x-examples": {
+          "Example 1": [
+            {
+              "id": "1296690801",
+              "auteurs": [
+                "Christoph Hübenthal",
+                "Christiane Alpers"
+              ],
+              "categorielivraison": "en_ligne",
+              "cotes": [
+                "BT83.63"
+              ],
+              "datederniermiseajour": "2023-01-24T21:43:40.137Z",
+              "datenouveaute": "2023-01-24T00:00:00.000Z",
+              "disciplines": [
+                "etudes-religieuses-histoire-philosophie"
+              ],
+              "editeur": "London T&T Clark",
+              "format": "1 online resource.",
+              "image": "https://syndetics.com/index.aspx?isbn=0567692175/SC.JPG",
+              "isbns": [
+                "0567692175",
+                "9780567692160",
+                "0567692167",
+                "9780567692177"
+              ],
+              "titre": "T&T Clark handbook of public theology / edited by Christoph Hübenthal and Christiane Alpers",
+              "type": "livre",
+              "url": "https://umontreal.on.worldcat.org/oclc/1296690801"
+            }
+          ]
+        },
+        "items": {
+          "$ref": "#/components/schemas/horaire"
+        }
+      },
+      "codeBib": {
+        "type": "string",
+        "example": "amenagement",
+        "pattern": "^[a-z-]+",
+        "enum": [
+          "amenagement",
+          "anthropologie-demographie-sociologie",
+          "art-cinema-musique",
+          "communication-sciences-information",
+          "criminologie-psychologie-travail-social",
+          "droit",
+          "economie-politique-relations-industrielles",
+          "education-psychoeducation",
+          "etudes-religieuses-histoire-philosophie",
+          "informatique-mathematique-sciences-nature",
+          "langues-litteratures",
+          "sciences-sante"
+        ],
+        "description": "Un code de bibliothèque\n\nVoir [https://github.com/bibudem/code-bib](https://github.com/bibudem/code-bib)",
+        "title": "Code de bibliothèque",
+        "x-stoplight": {
+          "id": "beb7a308c90cf"
+        }
+      },
+      "bibsMap": {
+        "type": "object",
+        "description": "Objet JSON contenant la liste de toutes les bibliothèques ayant un horaire",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "title": "Tableau des bibliothèquess",
+        "x-examples": {
+          "Example 1": {
+            "am": "Bibliothèque d'aménagement",
+            "antenne-paramedicale": "Bibliothèque du Parc",
+            "cartotheque": "Cartothèque",
+            "ch": "Bibliothèque de chimie",
+            "conservation": "Centre de conservation Lionel-Groulx",
+            "cs": "Bibliothèque des livres rares et collections spéciales",
+            "dr": "Bibliothèque de droit",
+            "ed": "Bibliothèque Thérèse-Gouin-Décarie",
+            "gp": "Bibliothèque de géographie",
+            "ki": "Bibliothèque de kinésiologie",
+            "laval": "Campus de Laval",
+            "marcel-laurin": "Centre de conservation – 101, boul. Marcel-Laurin",
+            "mi": "Bibliothèque de mathématiques et informatique",
+            "mu": "Bibliothèque de musique",
+            "mv": "Bibliothèque de médecine vétérinaire",
+            "pa": "Bibliothèque Marguerite-d’Youville",
+            "pb": "Service du prêt entre bibliothèques",
+            "py": "Bibliothèque de physique",
+            "sa": "Bibliothèque de la santé",
+            "sciences": "Bibliothèque des sciences",
+            "ss": "Bibliothèque des lettres et sciences humaines"
+          }
+        }
+      },
+      "ICSType": {
+        "title": "Fichier iCalendar",
+        "x-stoplight": {
+          "id": "34e78d7e55ab0"
+        },
+        "type": "string",
+        "description": "Fichier iCalendar",
+        "x-examples": {
+          "Fichier iCalendar": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Direction des bibliothèques - Université de Montréal//API hora\n ires v1.0.0//EN\nCALSCALE:GREGORIAN\nX-WR-TIMEZONE:America/Montreal\nX-PUBLISHED-TTL:P1H\nBEGIN:VTIMEZONE\nTZID:America/Montreal\nBEGIN:DAYLIGHT\nTZNAME:EDT\nDTSTART:19700308T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\nTZOFFSETFROM:-0500\nTZOFFSETTO:-0400\nEND:DAYLIGHT\nBEGIN:STANDARD\nTZNAME:EST\nDTSTART:19701101T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\nTZOFFSETFROM:-0400\nTZOFFSETTO:-0500\nEND:STANDARD\nEND:VTIMEZONE\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227723@bib.umontreal.ca\nDTSTART:20180611T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227724@bib.umontreal.ca\nDTSTART:20180612T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227725@bib.umontreal.ca\nDTSTART:20180613T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nEND:VCALENDAR\n"
+        }
+      },
+      "HttpStatusCode": {
+        "title": "Code HTTP",
+        "x-stoplight": {
+          "id": "58d6f80a0c6d4"
+        },
+        "type": "integer",
+        "example": 200,
+        "description": ""
+      },
+      "DateTimeOrDuration": {
+        "title": "DateTimeOrDuration",
+        "x-stoplight": {
+          "id": "max1b5rmub50g"
+        },
+        "oneOf": [
+          {
+            "format": "date-time"
+          },
+          {
+            "format": "duration"
+          }
+        ],
+        "type": "string",
+        "x-examples": {
+          "Une date": "2014-06-06",
+          "Une durée d'une journée": "P1D",
+          "Les dernière 48 heures": "PT48H",
+          "Le dernier mois": "P1M"
+        }
+      }
+    },
+    "responses": {
+      "HorairesListResponse": {
+        "description": "opération réussie",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/horaireList"
+            },
+            "examples": {
+              "Example 1": {
+                "value": [
+                  {
+                    "id": "1341844661",
+                    "titre": "Handbook of coriander (Coriandrum sativum) : chemistry, functionality, and applications / edited by Mohamed Fawzy Ramadan",
+                    "auteurs": [
+                      "Mohamed Fawzy Ramadan"
+                    ],
+                    "url": "https://umontreal.on.worldcat.org/oclc/1341844661",
+                    "categorielivraison": "en_ligne",
+                    "type": "livre",
+                    "editeur": "Boca Raton CRC Press",
+                    "cotes": [
+                      "SB351.C69"
+                    ],
+                    "disciplines": [
+                      "amenagement"
+                    ],
+                    "format": "1 online resource",
+                    "isbns": [
+                      "9781003204626",
+                      "1003204627"
+                    ],
+                    "image": "https://syndetics.com/index.aspx?isbn=9781003204626/SC.JPG",
+                    "datenouveaute": "2023-01-09T00:00:00.000Z",
+                    "datederniermiseajour": "2023-01-09T10:30:37.685Z"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "HorairesListICSResponse": {
+        "description": "Des horaires au format iCalendar",
+        "content": {
+          "text/calendar": {
+            "schema": {
+              "$ref": "#/components/schemas/ICSType"
+            }
+          }
+        }
+      },
+      "RequestValidationError": {
+        "description": "Une réponse qui documente une requête erronée",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/errors.json#/components/schemas/RequestError"
+            }
+          }
+        },
+        "headers": {}
+      },
+      "InternalErrorResponse": {
+        "description": "Description de l'erreur interne",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/errors.json#/components/schemas/InternalError"
+            }
+          }
+        }
+      },
+      "BibListResponse": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/bibsMap"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "fin": {
+        "name": "fin",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/DateTimeOrDuration",
+          "default": "9999-12-31T23:59:59-05:00"
+        },
+        "description": "xs:dateTime ou xs:duration. Valeur par défaut: 9999-12-31T23:59:59-05:00. \t\t\t\t   Si on ne spécifie pas la date de fin, le service retourne toutes les \t\t\t\t   dates qu'il contient à partir de la date de début indiquée. Si la \t\t\t\t   valeur est une durée, alors la date de fin est calculée en additionnant \t\t\t\t   cette durée à la date de début"
+      },
+      "bib": {
+        "name": "bib",
+        "in": "path",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-z-]+",
+          "example": "ss"
+        },
+        "description": "Un code de bibliothèque"
+      },
+      "debut": {
+        "name": "debut",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/DateTimeOrDuration"
+        },
+        "description": "xs:dateTime ou xs:duration. Valeur par défaut: le jour courant. \t\t\t\t   Si la valeur est une durée, alors la date de début est calculée à \t\t\t\t   partir de la date courante"
+      },
+      "ouvert": {
+        "name": "ouvert",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean",
+          "example": "true",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "false"
+        },
+        "description": "Indique si on veut uniquement les bibliothèques ouvertes pendant la période demandée."
+      },
+      "bibs": {
+        "name": "bibs",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": "Un ou des code(s) de bibliothèque"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.bib.umontreal.ca/horaires",
+      "description": "Serveur de production"
+    },
+    {
+      "url": "/",
+      "description": "Serveur de développement"
+    }
+  ]
+}
