@@ -1,0 +1,47 @@
+{
+  "name": "api-horaires",
+  "version": "2.0.0",
+  "description": "Service REST pour les heures d'ouvertures des services de la Direction des bibliothèques, Université de Montréal",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bibudem/api-horaires.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bibudem/api-horaires/issues"
+  },
+  "homepage": "https://github.com/bibudem/api-horaires",
+  "engines": {
+    "node": "16.17.0"
+  },
+  "dependencies": {
+    "@bibudem/api-communs": "^1.0.0",
+    "@casl/ability": "^6.3.3",
+    "@remillc/web-logger": "^0.1.0",
+    "body-parser": "^1.20.1",
+    "chalk": "^5.2.0",
+    "config": "^3.3.9",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "helmet": "^6.0.1",
+    "icalendar": "^0.7.1",
+    "jsonwebtoken": "^9.0.0",
+    "mysql": "^2.18.1",
+    "mysql-cache": "^2.1.2",
+    "passport": "^0.6.0",
+    "passport-anonymous": "^1.0.1",
+    "passport-hawk": "^4.0.0",
+    "passport-jwt": "^4.0.1",
+    "sqlstring": "^2.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
