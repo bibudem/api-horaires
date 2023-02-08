@@ -71,7 +71,7 @@
         },
         "summary": "Retourne un fil RSS de nouvelles acquisitions pour une discipline donné",
         "description": "Retourne les horaires d'une bibliothèque donnée au format [iCalendar](https://www.rfc-editor.org/rfc/rfc5545.html).",
-        "operationId": "getByBibICS",
+        "operationId": "getHoraireByBibICS",
         "tags": [
           "Horaires par bibliothèque"
         ]
@@ -109,7 +109,7 @@
         },
         "summary": "Retourne une liste de nouvelles acquisitions pour une discipline donné",
         "description": "Retourne des horaires pour une bibliothèque donnée.",
-        "operationId": "getByBib",
+        "operationId": "getHoraireByBib",
         "tags": [
           "Horaires par bibliothèque"
         ]
@@ -480,10 +480,10 @@
           "type": "boolean",
           "example": "true",
           "enum": [
-            "true",
-            "false"
+            true,
+            false
           ],
-          "default": "false"
+          "default": false
         },
         "description": "Indique si on veut uniquement les bibliothèques ouvertes pendant la période demandée."
       },
