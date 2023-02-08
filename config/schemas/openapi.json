@@ -32,94 +32,6 @@
     }
   ],
   "paths": {
-    "/about": {
-      "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
-    },
-    "/liste": {
-      "get": {
-        "summary": "Retourne la liste des bibliothèques ayant un horaire",
-        "operationId": "getListeBibs",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/BibListResponse"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalErrorResponse"
-          }
-        },
-        "description": "Retourne un objet contenant la liste des codes de biblithèques",
-        "tags": [
-          "Liste de code de bibliothèque"
-        ]
-      },
-      "parameters": []
-    },
-    "/{bib}.{format}": {
-      "summary": "Liste les nouvelles acquisitions pour une discipline",
-      "get": {
-        "parameters": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/HorairesListICSResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/RequestValidationError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalErrorResponse"
-          }
-        },
-        "summary": "Retourne un fil RSS de nouvelles acquisitions pour une discipline donné",
-        "description": "Retourne les horaires d'une bibliothèque donnée au format [iCalendar](https://www.rfc-editor.org/rfc/rfc5545.html).",
-        "operationId": "getHoraireByBibICS",
-        "tags": [
-          "Horaires par bibliothèque"
-        ]
-      },
-      "parameters": [
-        {
-          "schema": {
-            "type": "string",
-            "pattern": "ics"
-          },
-          "name": "format",
-          "in": "path",
-          "description": "L'extension de fichier \"ics\"",
-          "required": true
-        },
-        {
-          "$ref": "#/components/parameters/bib"
-        }
-      ]
-    },
-    "/{bib}": {
-      "summary": "Liste les nouvelles acquisitions pour une discipline",
-      "get": {
-        "parameters": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/HorairesListResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/RequestValidationError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalErrorResponse"
-          }
-        },
-        "summary": "Retourne une liste de nouvelles acquisitions pour une discipline donné",
-        "description": "Retourne des horaires pour une bibliothèque donnée.",
-        "operationId": "getHoraireByBib",
-        "tags": [
-          "Horaires par bibliothèque"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/bib"
-        }
-      ]
-    },
     "/": {
       "get": {
         "parameters": [
@@ -169,6 +81,94 @@
           "Horaires"
         ]
       }
+    },
+    "/{bib}": {
+      "summary": "Liste les nouvelles acquisitions pour une discipline",
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/HorairesListResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/RequestValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "summary": "Retourne une liste de nouvelles acquisitions pour une discipline donné",
+        "description": "Retourne des horaires pour une bibliothèque donnée.",
+        "operationId": "getHoraireByBib",
+        "tags": [
+          "Horaires par bibliothèque"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/bib"
+        }
+      ]
+    },
+    "/{bib}.{format}": {
+      "summary": "Liste les nouvelles acquisitions pour une discipline",
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/HorairesListICSResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/RequestValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "summary": "Retourne un fil RSS de nouvelles acquisitions pour une discipline donné",
+        "description": "Retourne les horaires d'une bibliothèque donnée au format [iCalendar](https://www.rfc-editor.org/rfc/rfc5545.html).",
+        "operationId": "getHoraireByBibICS",
+        "tags": [
+          "Horaires par bibliothèque"
+        ]
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "pattern": "ics"
+          },
+          "name": "format",
+          "in": "path",
+          "description": "L'extension de fichier \"ics\"",
+          "required": true
+        },
+        {
+          "$ref": "#/components/parameters/bib"
+        }
+      ]
+    },
+    "/liste": {
+      "get": {
+        "summary": "Retourne la liste des bibliothèques ayant un horaire",
+        "operationId": "getListeBibs",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/BibListResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "description": "Retourne un objet contenant la liste des codes de biblithèques",
+        "tags": [
+          "Liste de code de bibliothèque"
+        ]
+      },
+      "parameters": []
+    },
+    "/about": {
+      "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
     }
   },
   "components": {
