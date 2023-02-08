@@ -448,8 +448,7 @@
         "in": "query",
         "required": false,
         "schema": {
-          "$ref": "#/components/schemas/DateTimeOrDuration",
-          "default": "9999-12-31T23:59:59-05:00"
+          "$ref": "#/components/schemas/DateTimeOrDuration"
         },
         "description": "xs:dateTime ou xs:duration. Valeur par défaut: 9999-12-31T23:59:59-05:00. \t\t\t\t   Si on ne spécifie pas la date de fin, le service retourne toutes les \t\t\t\t   dates qu'il contient à partir de la date de début indiquée. Si la \t\t\t\t   valeur est une durée, alors la date de fin est calculée en additionnant \t\t\t\t   cette durée à la date de début"
       },
