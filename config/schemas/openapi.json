@@ -151,7 +151,7 @@
     "/liste": {
       "get": {
         "summary": "Retourne la liste des bibliothèques ayant un horaire",
-        "operationId": "getListeBibs",
+        "operationId": "getBibs",
         "responses": {
           "200": {
             "$ref": "#/components/responses/BibListResponse"
@@ -216,47 +216,80 @@
           "id": "768f5c6f55e11"
         }
       },
-      "horaireList": {
-        "type": "array",
+      "horaireMap": {
+        "type": "object",
         "title": "Liste d'horaires",
         "description": "Une liste d'horaires",
         "x-stoplight": {
-          "id": "8c28a05e7c7d5"
+          "id": "9548bdfc78bc7"
         },
         "x-examples": {
-          "Example 1": [
-            {
-              "id": "1296690801",
-              "auteurs": [
-                "Christoph Hübenthal",
-                "Christiane Alpers"
-              ],
-              "categorielivraison": "en_ligne",
-              "cotes": [
-                "BT83.63"
-              ],
-              "datederniermiseajour": "2023-01-24T21:43:40.137Z",
-              "datenouveaute": "2023-01-24T00:00:00.000Z",
-              "disciplines": [
-                "etudes-religieuses-histoire-philosophie"
-              ],
-              "editeur": "London T&T Clark",
-              "format": "1 online resource.",
-              "image": "https://syndetics.com/index.aspx?isbn=0567692175/SC.JPG",
-              "isbns": [
-                "0567692175",
-                "9780567692160",
-                "0567692167",
-                "9780567692177"
-              ],
-              "titre": "T&T Clark handbook of public theology / edited by Christoph Hübenthal and Christiane Alpers",
-              "type": "livre",
-              "url": "https://umontreal.on.worldcat.org/oclc/1296690801"
+          "Example 1": {
+            "total": 3,
+            "evenements": [
+              {
+                "id": "2843376@bib.umontreal.ca",
+                "date": "2023-02-08T05:00:00.000Z",
+                "bibliotheque": "ss",
+                "debut1": "00:00",
+                "fin1": "",
+                "debut2": "",
+                "fin2": "24:00",
+                "service": "regulier",
+                "periode": "regulier",
+                "sommaire": "ouvert 24h"
+              },
+              {
+                "id": "2852473@bib.umontreal.ca",
+                "date": "2023-02-08T05:00:00.000Z",
+                "bibliotheque": "ss",
+                "debut1": "07:00",
+                "fin1": "",
+                "debut2": "",
+                "fin2": "23:00",
+                "service": "reference",
+                "periode": "regulier",
+                "sommaire": "7h à 23h"
+              },
+              {
+                "id": "2852772@bib.umontreal.ca",
+                "date": "2023-02-08T05:00:00.000Z",
+                "bibliotheque": "ss",
+                "debut1": "09:00",
+                "fin1": "13:00",
+                "debut2": "14:30",
+                "fin2": "17:00",
+                "service": "soutien-informatique",
+                "periode": "regulier",
+                "sommaire": "9h à 13h et 14h30 à 17h"
+              }
+            ],
+            "labels": {
+              "bibs": {
+                "ss": "Bibliothèque des lettres et sciences humaines"
+              },
+              "services": {
+                "regulier": "Heures d'ouverture",
+                "reference": "Référence",
+                "soutien-informatique": "Soutien informatique"
+              },
+              "periodes": {
+                "regulier": "Régulier"
+              }
             }
-          ]
+          }
         },
-        "items": {
-          "$ref": "#/components/schemas/horaire"
+        "additionalProperties": false,
+        "properties": {
+          "evenements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/horaire"
+            }
+          },
+          "total": {
+            "type": "integer"
+          }
         }
       },
       "codeBib": {
@@ -356,15 +389,44 @@
           "Les dernière 48 heures": "PT48H",
           "Le dernier mois": "P1M"
         }
+      },
+      "horaireList": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "evenements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/horaire"
+            }
+          },
+          "labels": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "bibs": {
+                "type": "object"
+              },
+              "services": {
+                "type": "object"
+              },
+              "periodes": {
+                "type": "object"
+              }
+            }
+          }
+        }
       }
     },
     "responses": {
-      "HorairesListResponse": {
+      "HorairesResponse": {
         "description": "opération réussie",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/horaireList"
+              "$ref": "#/components/schemas/horaireMap"
             },
             "examples": {
               "Example 1": {
