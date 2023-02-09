@@ -88,7 +88,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/HorairesListResponse"
+            "$ref": "#/components/responses/HorairesResponse"
           },
           "400": {
             "$ref": "#/components/responses/RequestValidationError"
@@ -116,7 +116,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/HorairesListICSResponse"
+            "$ref": "#/components/responses/HorairesICSResponse"
           },
           "400": {
             "$ref": "#/components/responses/RequestValidationError"
@@ -294,27 +294,37 @@
       },
       "codeBib": {
         "type": "string",
-        "example": "amenagement",
-        "pattern": "^[a-z-]+",
-        "enum": [
-          "amenagement",
-          "anthropologie-demographie-sociologie",
-          "art-cinema-musique",
-          "communication-sciences-information",
-          "criminologie-psychologie-travail-social",
-          "droit",
-          "economie-politique-relations-industrielles",
-          "education-psychoeducation",
-          "etudes-religieuses-histoire-philosophie",
-          "informatique-mathematique-sciences-nature",
-          "langues-litteratures",
-          "sciences-sante"
-        ],
+        "example": "am",
+        "pattern": "^[a-z-]+$",
         "description": "Un code de bibliothèque\n\nVoir [https://github.com/bibudem/code-bib](https://github.com/bibudem/code-bib)",
         "title": "Code de bibliothèque",
         "x-stoplight": {
           "id": "beb7a308c90cf"
-        }
+        },
+        "enum": [
+          "am",
+          "antenne-paramedicale",
+          "cartotheque",
+          "marcel-laurin",
+          "ch",
+          "conservation",
+          "cs",
+          "dr",
+          "ed",
+          "gp",
+          "ki",
+          "laval",
+          "mi",
+          "mu",
+          "mv",
+          "pa",
+          "pb",
+          "py",
+          "sa",
+          "sciences",
+          "ss",
+          "youville"
+        ]
       },
       "bibsMap": {
         "type": "object",
@@ -462,7 +472,7 @@
           }
         }
       },
-      "HorairesListICSResponse": {
+      "HorairesICSResponse": {
         "description": "Des horaires au format iCalendar",
         "content": {
           "text/calendar": {
