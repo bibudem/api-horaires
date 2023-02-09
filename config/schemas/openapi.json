@@ -292,40 +292,6 @@
           }
         }
       },
-      "codeBib": {
-        "type": "string",
-        "example": "am",
-        "pattern": "^[a-z-]+$",
-        "description": "Un code de bibliothèque\n\nVoir [https://github.com/bibudem/code-bib](https://github.com/bibudem/code-bib)",
-        "title": "Code de bibliothèque",
-        "x-stoplight": {
-          "id": "beb7a308c90cf"
-        },
-        "enum": [
-          "am",
-          "antenne-paramedicale",
-          "cartotheque",
-          "marcel-laurin",
-          "ch",
-          "conservation",
-          "cs",
-          "dr",
-          "ed",
-          "gp",
-          "ki",
-          "laval",
-          "mi",
-          "mu",
-          "mv",
-          "pa",
-          "pb",
-          "py",
-          "sa",
-          "sciences",
-          "ss",
-          "youville"
-        ]
-      },
       "bibsMap": {
         "type": "object",
         "description": "Objet JSON contenant la liste de toutes les bibliothèques ayant un horaire",
@@ -386,9 +352,11 @@
         },
         "oneOf": [
           {
+            "type": "string",
             "format": "date-time"
           },
           {
+            "type": "string",
             "format": "duration"
           }
         ],
@@ -528,9 +496,7 @@
         "name": "bib",
         "in": "path",
         "schema": {
-          "type": "string",
-          "pattern": "^[a-z-]+",
-          "example": "ss"
+          "$ref": "https://raw.githubusercontent.com/bibudem/code-bib/master/openapi.json#/components/schemas/codeBib"
         },
         "description": "Un code de bibliothèque"
       },
@@ -565,7 +531,7 @@
         "schema": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "https://raw.githubusercontent.com/bibudem/code-bib/master/openapi.json#/components/schemas/codeBib"
           }
         },
         "description": "Un ou des code(s) de bibliothèque"
