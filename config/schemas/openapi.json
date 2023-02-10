@@ -177,9 +177,12 @@
         "type": "object",
         "title": "Horaire",
         "description": "Un objet contenant un horaire d'une bibliothèque ou d'un service",
+        "x-stoplight": {
+          "id": "768f5c6f55e11"
+        },
         "properties": {
           "id": {
-            "type": "string"
+            "type": "integer"
           },
           "date": {
             "type": "string"
@@ -211,10 +214,7 @@
         },
         "required": [
           "id"
-        ],
-        "x-stoplight": {
-          "id": "768f5c6f55e11"
-        }
+        ]
       },
       "horaireMap": {
         "type": "object",
