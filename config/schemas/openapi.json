@@ -46,6 +46,9 @@
           },
           {
             "$ref": "#/components/parameters/bibs"
+          },
+          {
+            "$ref": "#/components/parameters/format"
           }
         ],
         "responses": {
@@ -54,14 +57,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/horaireList"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ICSType"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/horaireList"
+                }
+              },
+              "text/calendar": {
+                "schema": {
+                  "$ref": "#/components/schemas/ICSType"
                 }
               }
             }
@@ -536,6 +537,21 @@
           }
         },
         "description": "Un ou des code(s) de bibliothèque"
+      },
+      "format": {
+        "name": "format",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "default": "json",
+          "enum": [
+            "json",
+            "ics"
+          ],
+          "example": "ics"
+        },
+        "description": "Le format demandé: json ou ics"
       }
     }
   },
