@@ -62,7 +62,7 @@
             "$ref": "#/components/responses/InternalErrorResponse"
           }
         },
-        "operationId": "getHoraire",
+        "operationId": "getHoraires",
         "summary": "Retourne les horaires",
         "description": "Trouve des horaires en filtrant par bibliothèque et période.\n",
         "x-internal": false,
@@ -143,7 +143,7 @@
         "operationId": "getBibs",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/BibListResponse"
+            "$ref": "#/components/responses/BibsResponse"
           },
           "500": {
             "$ref": "#/components/responses/InternalErrorResponse"
@@ -270,14 +270,29 @@
         },
         "additionalProperties": false,
         "properties": {
+          "total": {
+            "type": "integer"
+          },
           "evenements": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/horaire"
             }
           },
-          "total": {
-            "type": "integer"
+          "labels": {
+            "type": "object",
+            "description": "Objet contenant les libellés des bibliothèques, services et périodes disponibles dans cette liste d'horaires",
+            "properties": {
+              "bibs": {
+                "$ref": "#/components/schemas/bibsMap"
+              },
+              "services": {
+                "$ref": "#/components/schemas/servicesMap"
+              },
+              "periodes": {
+                "$ref": "#/components/schemas/periodesMap"
+              }
+            }
           }
         }
       },
@@ -287,7 +302,7 @@
         "additionalProperties": {
           "type": "string"
         },
-        "title": "Tableau des bibliothèquess",
+        "title": "Tableau des bibliothèques",
         "x-examples": {
           "Example 1": {
             "am": "Bibliothèque d'aménagement",
@@ -312,6 +327,41 @@
             "sciences": "Bibliothèque des sciences",
             "ss": "Bibliothèque des lettres et sciences humaines"
           }
+        }
+      },
+      "servicesMap": {
+        "type": "object",
+        "description": "Objet JSON contenant la liste de touts les types de services pour les horaires demandés",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "title": "Tableau des types de services",
+        "x-examples": {
+          "Example 1": {
+            "regulier": "Heures d'ouverture",
+            "reference": "Référence",
+            "services": "Services",
+            "soutien-informatique": "Soutien informatique"
+          }
+        },
+        "x-stoplight": {
+          "id": "23f0a7d9c13b6"
+        }
+      },
+      "periodesMap": {
+        "type": "object",
+        "description": "Objet JSON contenant la liste de touts les types de périodes pour les horaires demandés",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "title": "Tableau des types de périodes",
+        "x-examples": {
+          "Example 1": {
+            "regulier": "Régulier"
+          }
+        },
+        "x-stoplight": {
+          "id": "b30332801108c"
         }
       },
       "ICSType": {
@@ -465,7 +515,7 @@
           }
         }
       },
-      "BibListResponse": {
+      "BibsResponse": {
         "description": "",
         "content": {
           "application/json": {
