@@ -112,6 +112,21 @@
     },
     "/{bib}.{format}": {
       "summary": "Liste les nouvelles acquisitions pour une discipline",
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "pattern": "ics"
+          },
+          "name": "format",
+          "in": "path",
+          "description": "L'extension de fichier \"ics\"",
+          "required": true
+        },
+        {
+          "$ref": "#/components/parameters/bib"
+        }
+      ],
       "get": {
         "parameters": [],
         "responses": {
@@ -131,22 +146,7 @@
         "tags": [
           "Horaires par bibliothèque"
         ]
-      },
-      "parameters": [
-        {
-          "schema": {
-            "type": "string",
-            "pattern": "ics"
-          },
-          "name": "format",
-          "in": "path",
-          "description": "L'extension de fichier \"ics\"",
-          "required": true
-        },
-        {
-          "$ref": "#/components/parameters/bib"
-        }
-      ]
+      }
     },
     "/liste": {
       "get": {
@@ -498,7 +498,8 @@
         "schema": {
           "$ref": "https://raw.githubusercontent.com/bibudem/code-bib/master/openapi.json#/components/schemas/codeBib"
         },
-        "description": "Un code de bibliothèque"
+        "description": "Un code de bibliothèque",
+        "required": true
       },
       "debut": {
         "name": "debut",
