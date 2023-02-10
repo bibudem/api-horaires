@@ -49,26 +49,11 @@
           },
           {
             "$ref": "#/components/parameters/format"
-          },
-          {
-            "$ref": "#/components/parameters/accept"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/horaireList"
-                }
-              },
-              "text/calendar": {
-                "schema": {
-                  "$ref": "#/components/schemas/ICSType"
-                }
-              }
-            }
+            "$ref": "#/components/responses/HorairesResponse"
           },
           "400": {
             "$ref": "#/components/responses/RequestValidationError"
@@ -440,6 +425,11 @@
                   }
                 ]
               }
+            }
+          },
+          "text/calendar": {
+            "schema": {
+              "$ref": "#/components/schemas/ICSType"
             }
           }
         }
