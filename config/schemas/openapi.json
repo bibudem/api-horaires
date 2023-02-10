@@ -49,6 +49,9 @@
           },
           {
             "$ref": "#/components/parameters/format"
+          },
+          {
+            "$ref": "#/components/parameters/accept"
           }
         ],
         "responses": {
@@ -552,6 +555,21 @@
           "example": "ics"
         },
         "description": "Le format demandé: json ou ics"
+      },
+      "accept": {
+        "name": "accept",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "default": "application/json",
+          "enum": [
+            "application/json",
+            "text/calendar"
+          ],
+          "example": "text/calendar"
+        },
+        "description": "Le format demandé: text/calendar ou application/json"
       }
     }
   },
