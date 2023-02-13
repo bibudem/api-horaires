@@ -58,6 +58,9 @@
           "400": {
             "$ref": "#/components/responses/RequestValidationError"
           },
+          "415": {
+            "$ref": "#/components/responses/RequestValidationError"
+          },
           "500": {
             "$ref": "#/components/responses/InternalErrorResponse"
           }
