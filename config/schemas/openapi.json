@@ -32,6 +32,28 @@
     }
   ],
   "paths": {
+    "/liste": {
+      "get": {
+        "summary": "Retourne la liste des bibliothèques ayant un horaire",
+        "operationId": "getBibs",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/BibsResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "description": "Retourne un objet contenant la liste des codes de biblithèques",
+        "tags": [
+          "Liste de code de bibliothèque"
+        ]
+      },
+      "parameters": []
+    },
+    "/about": {
+      "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
+    },
     "/": {
       "get": {
         "parameters": [
@@ -139,28 +161,6 @@
           "Horaires par bibliothèque"
         ]
       }
-    },
-    "/liste": {
-      "get": {
-        "summary": "Retourne la liste des bibliothèques ayant un horaire",
-        "operationId": "getBibs",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/BibsResponse"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalErrorResponse"
-          }
-        },
-        "description": "Retourne un objet contenant la liste des codes de biblithèques",
-        "tags": [
-          "Liste de code de bibliothèque"
-        ]
-      },
-      "parameters": []
-    },
-    "/about": {
-      "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
     }
   },
   "components": {
