@@ -191,6 +191,62 @@
   },
   "components": {
     "schemas": {
+      "bibsMap": {
+        "type": "object",
+        "description": "Objet JSON contenant la liste de toutes les bibliothèques ayant un horaire",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "title": "Tableau des bibliothèques",
+        "x-examples": {
+          "Example 1": {
+            "am": "Bibliothèque d'aménagement",
+            "antenne-paramedicale": "Bibliothèque du Parc",
+            "cartotheque": "Cartothèque",
+            "ch": "Bibliothèque de chimie",
+            "conservation": "Centre de conservation Lionel-Groulx",
+            "cs": "Bibliothèque des livres rares et collections spéciales",
+            "dr": "Bibliothèque de droit",
+            "ed": "Bibliothèque Thérèse-Gouin-Décarie",
+            "gp": "Bibliothèque de géographie",
+            "ki": "Bibliothèque de kinésiologie",
+            "laval": "Campus de Laval",
+            "marcel-laurin": "Centre de conservation – 101, boul. Marcel-Laurin",
+            "mi": "Bibliothèque de mathématiques et informatique",
+            "mu": "Bibliothèque de musique",
+            "mv": "Bibliothèque de médecine vétérinaire",
+            "pa": "Bibliothèque Marguerite-d’Youville",
+            "pb": "Service du prêt entre bibliothèques",
+            "py": "Bibliothèque de physique",
+            "sa": "Bibliothèque de la santé",
+            "sciences": "Bibliothèque des sciences",
+            "ss": "Bibliothèque des lettres et sciences humaines"
+          }
+        }
+      },
+      "DateTimeOrDuration": {
+        "title": "DateTimeOrDuration",
+        "x-stoplight": {
+          "id": "max1b5rmub50g"
+        },
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "string",
+            "format": "duration"
+          }
+        ],
+        "type": "string",
+        "x-examples": {
+          "Une date": "2014-06-06",
+          "Une durée d'une journée": "P1D",
+          "Les dernière 48 heures": "PT48H",
+          "Le dernier mois": "P1M"
+        }
+      },
       "horaire": {
         "type": "object",
         "title": "Horaire",
@@ -325,117 +381,6 @@
           }
         }
       },
-      "bibsMap": {
-        "type": "object",
-        "description": "Objet JSON contenant la liste de toutes les bibliothèques ayant un horaire",
-        "additionalProperties": {
-          "type": "string"
-        },
-        "title": "Tableau des bibliothèques",
-        "x-examples": {
-          "Example 1": {
-            "am": "Bibliothèque d'aménagement",
-            "antenne-paramedicale": "Bibliothèque du Parc",
-            "cartotheque": "Cartothèque",
-            "ch": "Bibliothèque de chimie",
-            "conservation": "Centre de conservation Lionel-Groulx",
-            "cs": "Bibliothèque des livres rares et collections spéciales",
-            "dr": "Bibliothèque de droit",
-            "ed": "Bibliothèque Thérèse-Gouin-Décarie",
-            "gp": "Bibliothèque de géographie",
-            "ki": "Bibliothèque de kinésiologie",
-            "laval": "Campus de Laval",
-            "marcel-laurin": "Centre de conservation – 101, boul. Marcel-Laurin",
-            "mi": "Bibliothèque de mathématiques et informatique",
-            "mu": "Bibliothèque de musique",
-            "mv": "Bibliothèque de médecine vétérinaire",
-            "pa": "Bibliothèque Marguerite-d’Youville",
-            "pb": "Service du prêt entre bibliothèques",
-            "py": "Bibliothèque de physique",
-            "sa": "Bibliothèque de la santé",
-            "sciences": "Bibliothèque des sciences",
-            "ss": "Bibliothèque des lettres et sciences humaines"
-          }
-        }
-      },
-      "servicesMap": {
-        "type": "object",
-        "description": "Objet JSON contenant la liste de touts les types de services pour les horaires demandés",
-        "additionalProperties": {
-          "type": "string"
-        },
-        "title": "Tableau des types de services",
-        "x-examples": {
-          "Example 1": {
-            "regulier": "Heures d'ouverture",
-            "reference": "Référence",
-            "services": "Services",
-            "soutien-informatique": "Soutien informatique"
-          }
-        },
-        "x-stoplight": {
-          "id": "23f0a7d9c13b6"
-        }
-      },
-      "periodesMap": {
-        "type": "object",
-        "description": "Objet JSON contenant la liste de touts les types de périodes pour les horaires demandés",
-        "additionalProperties": {
-          "type": "string"
-        },
-        "title": "Tableau des types de périodes",
-        "x-examples": {
-          "Example 1": {
-            "regulier": "Régulier"
-          }
-        },
-        "x-stoplight": {
-          "id": "b30332801108c"
-        }
-      },
-      "ICSType": {
-        "title": "Fichier iCalendar",
-        "x-stoplight": {
-          "id": "34e78d7e55ab0"
-        },
-        "type": "string",
-        "description": "Fichier iCalendar",
-        "x-examples": {
-          "Fichier iCalendar": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Direction des bibliothèques - Université de Montréal//API hora\n ires v1.0.0//EN\nCALSCALE:GREGORIAN\nX-WR-TIMEZONE:America/Montreal\nX-PUBLISHED-TTL:P1H\nBEGIN:VTIMEZONE\nTZID:America/Montreal\nBEGIN:DAYLIGHT\nTZNAME:EDT\nDTSTART:19700308T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\nTZOFFSETFROM:-0500\nTZOFFSETTO:-0400\nEND:DAYLIGHT\nBEGIN:STANDARD\nTZNAME:EST\nDTSTART:19701101T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\nTZOFFSETFROM:-0400\nTZOFFSETTO:-0500\nEND:STANDARD\nEND:VTIMEZONE\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227723@bib.umontreal.ca\nDTSTART:20180611T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227724@bib.umontreal.ca\nDTSTART:20180612T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227725@bib.umontreal.ca\nDTSTART:20180613T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nEND:VCALENDAR\n"
-        }
-      },
-      "HttpStatusCode": {
-        "title": "Code HTTP",
-        "x-stoplight": {
-          "id": "58d6f80a0c6d4"
-        },
-        "type": "integer",
-        "example": 200,
-        "description": ""
-      },
-      "DateTimeOrDuration": {
-        "title": "DateTimeOrDuration",
-        "x-stoplight": {
-          "id": "max1b5rmub50g"
-        },
-        "oneOf": [
-          {
-            "type": "string",
-            "format": "date-time"
-          },
-          {
-            "type": "string",
-            "format": "duration"
-          }
-        ],
-        "type": "string",
-        "x-examples": {
-          "Une date": "2014-06-06",
-          "Une durée d'une journée": "P1D",
-          "Les dernière 48 heures": "PT48H",
-          "Le dernier mois": "P1M"
-        }
-      },
       "horaireList": {
         "type": "object",
         "properties": {
@@ -463,6 +408,79 @@
               }
             }
           }
+        }
+      },
+      "HttpStatusCode": {
+        "title": "Code HTTP",
+        "x-stoplight": {
+          "id": "58d6f80a0c6d4"
+        },
+        "type": "integer",
+        "example": 200,
+        "description": ""
+      },
+      "ICSType": {
+        "title": "Fichier iCalendar",
+        "x-stoplight": {
+          "id": "34e78d7e55ab0"
+        },
+        "type": "string",
+        "description": "Fichier iCalendar",
+        "x-examples": {
+          "Fichier iCalendar": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Direction des bibliothèques - Université de Montréal//API hora\n ires v1.0.0//EN\nCALSCALE:GREGORIAN\nX-WR-TIMEZONE:America/Montreal\nX-PUBLISHED-TTL:P1H\nBEGIN:VTIMEZONE\nTZID:America/Montreal\nBEGIN:DAYLIGHT\nTZNAME:EDT\nDTSTART:19700308T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\nTZOFFSETFROM:-0500\nTZOFFSETTO:-0400\nEND:DAYLIGHT\nBEGIN:STANDARD\nTZNAME:EST\nDTSTART:19701101T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\nTZOFFSETFROM:-0400\nTZOFFSETTO:-0500\nEND:STANDARD\nEND:VTIMEZONE\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227723@bib.umontreal.ca\nDTSTART:20180611T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227724@bib.umontreal.ca\nDTSTART:20180612T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227725@bib.umontreal.ca\nDTSTART:20180613T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nEND:VCALENDAR\n"
+        }
+      },
+      "periode": {
+        "title": "periode",
+        "x-stoplight": {
+          "id": "kwy5vuei12lv0"
+        },
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "order": {
+            "type": "integer"
+          },
+          "key": {
+            "type": "string"
+          }
+        }
+      },
+      "periodesMap": {
+        "type": "object",
+        "description": "Objet JSON contenant la liste de touts les types de périodes pour les horaires demandés",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/periode"
+        },
+        "title": "Tableau des types de périodes",
+        "x-examples": {
+          "Example 1": {
+            "regulier": "Régulier"
+          }
+        },
+        "x-stoplight": {
+          "id": "b30332801108c"
+        }
+      },
+      "servicesMap": {
+        "type": "object",
+        "description": "Objet JSON contenant la liste de touts les types de services pour les horaires demandés",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "title": "Tableau des types de services",
+        "x-examples": {
+          "Example 1": {
+            "regulier": "Heures d'ouverture",
+            "reference": "Référence",
+            "services": "Services",
+            "soutien-informatique": "Soutien informatique"
+          }
+        },
+        "x-stoplight": {
+          "id": "23f0a7d9c13b6"
         }
       }
     },
