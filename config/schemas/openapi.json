@@ -35,7 +35,7 @@
     "/liste": {
       "get": {
         "summary": "Retourne la liste des bibliothèques ayant un horaire",
-        "operationId": "getBibs",
+        "operationId": "listBibs",
         "responses": {
           "200": {
             "$ref": "#/components/responses/BibsResponse"
@@ -50,6 +50,32 @@
         ]
       },
       "parameters": []
+    },
+    "/services": {
+      "get": {
+        "summary": "Retourne la liste des services ayant un horaire",
+        "tags": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ServicesResponse"
+          }
+        },
+        "operationId": "listServices",
+        "description": "Retourne un objet contenant la liste des types de services"
+      }
+    },
+    "/periodes": {
+      "get": {
+        "summary": "Retourne la liste des périodes",
+        "tags": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PeriodesResponse"
+          }
+        },
+        "operationId": "listPeriodes",
+        "description": "Retourne un objet contenant la liste des types de périodes"
+      }
     },
     "/about": {
       "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
@@ -524,6 +550,26 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/bibsMap"
+            }
+          }
+        }
+      },
+      "ServicesResponse": {
+        "description": "Example response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/servicesMap"
+            }
+          }
+        }
+      },
+      "PeriodesResponse": {
+        "description": "opération réussie",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/periodesMap"
             }
           }
         }
