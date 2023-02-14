@@ -382,7 +382,9 @@
         "additionalProperties": false,
         "properties": {
           "total": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Le nombre d'horaires disponibles dans la réponse",
+            "minimum": 0
           },
           "evenements": {
             "type": "array",
@@ -634,6 +636,33 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/LabelsMap"
+            },
+            "examples": {
+              "Liste des codes de bibliothèques": {
+                "value": {
+                  "am": "Bibliothèque d'aménagement",
+                  "antenne-paramedicale": "Bibliothèque du Parc",
+                  "cartotheque": "Cartothèque",
+                  "ch": "Bibliothèque de chimie",
+                  "conservation": "Centre de conservation Lionel-Groulx",
+                  "cs": "Bibliothèque des livres rares et collections spéciales",
+                  "dr": "Bibliothèque de droit",
+                  "ed": "Bibliothèque Thérèse-Gouin-Décarie",
+                  "gp": "Bibliothèque de géographie",
+                  "ki": "Bibliothèque de kinésiologie",
+                  "laval": "Campus de Laval",
+                  "marcel-laurin": "Centre de conservation – 101, boul. Marcel-Laurin",
+                  "mi": "Bibliothèque de mathématiques et informatique",
+                  "mu": "Bibliothèque de musique",
+                  "mv": "Bibliothèque de médecine vétérinaire",
+                  "pa": "Bibliothèque Marguerite-d’Youville",
+                  "pb": "Service du prêt entre bibliothèques",
+                  "py": "Bibliothèque de physique",
+                  "sa": "Bibliothèque de la santé",
+                  "sciences": "Bibliothèque des sciences",
+                  "ss": "Bibliothèque des lettres et sciences humaines"
+                }
+              }
             }
           }
         }
@@ -644,6 +673,47 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/Services"
+            },
+            "examples": {
+              "Une liste de services": {
+                "value": {
+                  "regulier": {
+                    "label": "Heures d'ouverture",
+                    "order": 1,
+                    "key": "regulier"
+                  },
+                  "services": {
+                    "label": "Services",
+                    "order": 3,
+                    "key": "services"
+                  },
+                  "reference": {
+                    "label": "Référence",
+                    "order": 4,
+                    "key": "reference"
+                  },
+                  "soutien-informatique": {
+                    "label": "Soutien informatique",
+                    "order": 5,
+                    "key": "soutien-informatique"
+                  },
+                  "pret": {
+                    "label": "Prêt",
+                    "order": 6,
+                    "key": "pret"
+                  },
+                  "mediatheque": {
+                    "label": "Médiathèque J.-A.-DeSève",
+                    "order": 7,
+                    "key": "mediatheque"
+                  },
+                  "sdaesh": {
+                    "label": "Soutien SDAESH",
+                    "order": 8,
+                    "key": "sdaesh"
+                  }
+                }
+              }
             }
           }
         }
@@ -654,6 +724,20 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/Periodes"
+            },
+            "examples": {
+              "Une liste de types de périodes": {
+                "value": {
+                  "regulier": "Régulier",
+                  "ete": "Session d'été (mai-juin)",
+                  "ete1": "Horaire d'été",
+                  "intra": "Horaire prolongé mi-session",
+                  "fetes": "Période des fêtes",
+                  "examens-finaux": "Horaire prolongé – Finaux",
+                  "examens-mi-session": "Horaire prolongé – Mi-session",
+                  "ferie": "Férié"
+                }
+              }
             }
           }
         }
@@ -667,7 +751,7 @@
         "schema": {
           "$ref": "#/components/schemas/DateOrDurationFin"
         },
-        "description": "Une date `xs:date` ou une durée `xs:duration`.\nValeur par défaut: `275760-09-13T00:00:00.000Z` (ce qui correspond à : \n`new Date(8640000000000000)`.\nSi la valeur est une durée, alors la date de fin est calculée en additionnant cette durée à la date de début"
+        "description": "Une date `xs:date` ou une durée `xs:duration`.\nValeur par défaut: `9999-12-31`.\nSi la valeur est une durée, alors la date de fin est calculée en additionnant cette durée à la date de début"
       },
       "bib": {
         "name": "bib",
@@ -685,7 +769,7 @@
         "schema": {
           "$ref": "#/components/schemas/DateOrDurationDebut"
         },
-        "description": "Une date `xs:date` ou une durée `xs:duration`. Valeur par défaut: le jour courant. Si la valeur est une durée, alors la date de début est calculée à partir de la date courante, zéro heure locale. Par exemple, `2023-02-14T00:00:00-05:00`"
+        "description": "Une date `xs:date` ou une durée `xs:duration`. Valeur par défaut: le jour courant. Si la valeur est une durée, alors la date de début est calculée à partir de la date courante, zéro heure locale. Par exemple, `2023-02-14`"
       },
       "ouvert": {
         "name": "ouvert",
