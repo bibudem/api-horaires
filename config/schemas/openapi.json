@@ -191,42 +191,6 @@
   },
   "components": {
     "schemas": {
-      "BibsMap": {
-        "type": "object",
-        "description": "Objet JSON contenant la liste de toutes les bibliothèques ayant un horaire",
-        "additionalProperties": {
-          "type": "string"
-        },
-        "title": "Tableau des bibliothèques",
-        "x-examples": {
-          "Example 1": {
-            "am": "Bibliothèque d'aménagement",
-            "antenne-paramedicale": "Bibliothèque du Parc",
-            "cartotheque": "Cartothèque",
-            "ch": "Bibliothèque de chimie",
-            "conservation": "Centre de conservation Lionel-Groulx",
-            "cs": "Bibliothèque des livres rares et collections spéciales",
-            "dr": "Bibliothèque de droit",
-            "ed": "Bibliothèque Thérèse-Gouin-Décarie",
-            "gp": "Bibliothèque de géographie",
-            "ki": "Bibliothèque de kinésiologie",
-            "laval": "Campus de Laval",
-            "marcel-laurin": "Centre de conservation – 101, boul. Marcel-Laurin",
-            "mi": "Bibliothèque de mathématiques et informatique",
-            "mu": "Bibliothèque de musique",
-            "mv": "Bibliothèque de médecine vétérinaire",
-            "pa": "Bibliothèque Marguerite-d’Youville",
-            "pb": "Service du prêt entre bibliothèques",
-            "py": "Bibliothèque de physique",
-            "sa": "Bibliothèque de la santé",
-            "sciences": "Bibliothèque des sciences",
-            "ss": "Bibliothèque des lettres et sciences humaines"
-          }
-        },
-        "x-stoplight": {
-          "id": "50440824d74ef"
-        }
-      },
       "DateTimeOrDuration": {
         "title": "DateTimeOrDuration",
         "x-stoplight": {
@@ -372,16 +336,13 @@
             "description": "Objet contenant les libellés des bibliothèques, services et périodes disponibles dans cette liste d'horaires",
             "properties": {
               "bibs": {
-                "$ref": "#/components/schemas/BibsMap"
+                "$ref": "#/components/schemas/LabelsMap"
               },
               "services": {
-                "$ref": "#/components/schemas/ServicesMap"
+                "$ref": "#/components/schemas/LabelsMap"
               },
               "periodes": {
-                "type": "object",
-                "additionalProperties": {
-                  "$ref": "#/components/schemas/Periode"
-                }
+                "$ref": "#/components/schemas/LabelsMap"
               }
             }
           }
@@ -410,6 +371,17 @@
           "Fichier iCalendar": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Direction des bibliothèques - Université de Montréal//API hora\n ires v1.0.0//EN\nCALSCALE:GREGORIAN\nX-WR-TIMEZONE:America/Montreal\nX-PUBLISHED-TTL:P1H\nBEGIN:VTIMEZONE\nTZID:America/Montreal\nBEGIN:DAYLIGHT\nTZNAME:EDT\nDTSTART:19700308T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\nTZOFFSETFROM:-0500\nTZOFFSETTO:-0400\nEND:DAYLIGHT\nBEGIN:STANDARD\nTZNAME:EST\nDTSTART:19701101T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\nTZOFFSETFROM:-0400\nTZOFFSETTO:-0500\nEND:STANDARD\nEND:VTIMEZONE\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227723@bib.umontreal.ca\nDTSTART:20180611T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227724@bib.umontreal.ca\nDTSTART:20180612T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227725@bib.umontreal.ca\nDTSTART:20180613T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nEND:VCALENDAR\n"
         }
       },
+      "LabelsMap": {
+        "title": "LabelsMap",
+        "x-stoplight": {
+          "id": "wxi82kywp8422"
+        },
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "description": "Un objet contenant une série de valeurs key/value de type:\n```\n/**\n * @type {Object.<string, string>}\n */\n ```"
+      },
       "Periode": {
         "title": "periode",
         "x-stoplight": {
@@ -428,7 +400,7 @@
           }
         }
       },
-      "PeriodesMap": {
+      "Periodes": {
         "type": "object",
         "description": "Objet JSON contenant la liste de touts les types de périodes pour les horaires demandés",
         "additionalProperties": {
@@ -441,7 +413,7 @@
           }
         },
         "x-stoplight": {
-          "id": "e89b93ce18f83"
+          "id": "f9175c6c41e7d"
         }
       },
       "Service": {
@@ -468,7 +440,7 @@
         ],
         "description": "Un objet contenant la description d'un service"
       },
-      "ServicesMap": {
+      "Services": {
         "type": "object",
         "description": "Objet JSON contenant la liste de touts les types de services pour les horaires demandés",
         "additionalProperties": {
@@ -484,7 +456,7 @@
           }
         },
         "x-stoplight": {
-          "id": "642f2312ba91d"
+          "id": "21d422b818f00"
         }
       }
     },
@@ -574,11 +546,11 @@
         }
       },
       "BibsResponse": {
-        "description": "",
+        "description": "Retourne un objet JSON contenant la liste de toutes les bibliothèques ayant un horaire",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/BibsMap"
+              "$ref": "#/components/schemas/LabelsMap"
             }
           }
         }
@@ -588,7 +560,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ServicesMap"
+              "$ref": "#/components/schemas/Services"
             }
           }
         }
@@ -598,7 +570,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/PeriodesMap"
+              "$ref": "#/components/schemas/Periodes"
             }
           }
         }
@@ -687,7 +659,7 @@
           ],
           "example": "text/calendar"
         },
-        "description": "Le format demandé: text/calendar ou application/json"
+        "description": "Le format demandé: `text/calendar` ou `application/json`"
       }
     }
   },
