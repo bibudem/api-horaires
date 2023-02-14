@@ -447,7 +447,7 @@
         }
       },
       "Periodes": {
-        "$ref": "#/components/schemas/LabelsMap",
+        "$ref": "#/components/schemas/LabelsMap"
       },
       "Service": {
         "title": "Service",
