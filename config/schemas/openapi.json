@@ -206,34 +206,10 @@
   },
   "components": {
     "schemas": {
-      "DateTime": {
-        "title": "DateTime",
+      "DateTimeOrDurationDebut": {
+        "title": "DateTimeOrDurationDebut",
         "x-stoplight": {
-          "id": "pcqw7pdwvohfi"
-        },
-        "type": "string",
-        "format": "date",
-        "externalDocs": {
-          "url": "https://www.w3.org/TR/xmlschema-2/#dateTime",
-          "description": "3.2.6 duration - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
-        }
-      },
-      "Duration": {
-        "title": "Duration",
-        "x-stoplight": {
-          "id": "4e99dbb32d376"
-        },
-        "type": "string",
-        "format": "duration",
-        "externalDocs": {
-          "url": "https://www.w3.org/TR/xmlschema-2/#duration",
-          "description": "3.2.7 dateTime - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
-        }
-      },
-      "DateTimeOrDuration": {
-        "title": "DateTimeOrDuration",
-        "x-stoplight": {
-          "id": "max1b5rmub50g"
+          "id": "f2b9972905848"
         },
         "oneOf": [
           {
@@ -684,7 +660,7 @@
         "schema": {
           "$ref": "#/components/schemas/DateTimeOrDurationFin"
         },
-        "description": "Une date `xs:dateTime` ou une durée `xs:duration`.\nValeur par défaut: `275760-09-13T00:00:00.000Z` (ce qui correspond à : \n`new Date(8640000000000000)`.\nSi la valeur est une durée, alors la date de fin est calculée en additionnant cette durée à la date de début"
+        "description": "Une date `xs:date`, une date/heure `xs:dateTime` ou une durée `xs:duration`.\nValeur par défaut: `275760-09-13T00:00:00.000Z` (ce qui correspond à : \n`new Date(8640000000000000)`.\nSi la valeur est une durée, alors la date de fin est calculée en additionnant cette durée à la date de début"
       },
       "bib": {
         "name": "bib",
@@ -700,11 +676,9 @@
         "in": "query",
         "required": false,
         "schema": {
-          "$ref": "#/components/schemas/DateTimeOrDuration",
-          "type": "string",
-          "format": "dateTimeOrDuration"
+          "$ref": "#/components/schemas/DateTimeOrDurationDebut"
         },
-        "description": "Une date `xs:dateTime` ou une durée `xs:duration`. Valeur par défaut: le jour courant. Si la valeur est une durée, alors la date de début est calculée à partir de la date courante, zéro heure locale. Par exemple, `2023-02-14T00:00:00-05:00`"
+        "description": "Une date `xs:date`, une date/heure `xs:dateTime` ou une durée `xs:duration`. Valeur par défaut: le jour courant. Si la valeur est une durée, alors la date de début est calculée à partir de la date courante, zéro heure locale. Par exemple, `2023-02-14T00:00:00-05:00`"
       },
       "ouvert": {
         "name": "ouvert",
