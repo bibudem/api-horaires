@@ -206,8 +206,8 @@
   },
   "components": {
     "schemas": {
-      "DateTimeOrDurationDebut": {
-        "title": "DateTimeOrDurationDebut",
+      "DateOrDurationDebut": {
+        "title": "DateOrDurationDebut",
         "x-stoplight": {
           "id": "f2b9972905848"
         },
@@ -217,7 +217,7 @@
             "type": "string",
             "format": "duration",
             "externalDocs": {
-              "url": "https://www.w3.org/TR/xmlschema-2/#dateTime",
+              "url": "https://www.w3.org/TR/xmlschema-2/#duration",
               "description": "3.2.6 duration - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
             }
           },
@@ -228,35 +228,26 @@
             "externalDocs": {
               "url": "https://www.w3.org/TR/xmlschema-2/#date",
               "description": "3.2.9 date - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
-            }
-          },
-          {
-            "title": "DateTime",
-            "type": "string",
-            "format": "date-time",
-            "externalDocs": {
-              "url": "https://www.w3.org/TR/xmlschema-2/#duration",
-              "description": "3.2.7 dateTime - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
             }
           }
         ],
         "type": "string",
         "x-examples": {
           "Une date": "2014-06-06",
-          "Une durée d'une journée": "P1D",
-          "Les dernière 48 heures": "PT48H",
-          "Le dernier mois": "P1M"
+          "Une durée d'un mois": "P1M",
+          "Les dernière 48 heures": "-PT48H",
+          "Le dernier mois": "-P1M"
         }
       },
-      "DateTimeOrDurationFin": {
-        "title": "DateTimeOrDurationFin",
+      "DateOrDurationFin": {
+        "title": "DateOrDurationFin",
         "oneOf": [
           {
             "title": "Duration",
             "type": "string",
             "format": "duration",
             "externalDocs": {
-              "url": "https://www.w3.org/TR/xmlschema-2/#dateTime",
+              "url": "https://www.w3.org/TR/xmlschema-2/#duration",
               "description": "3.2.6 duration - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
             }
           },
@@ -267,17 +258,6 @@
             "externalDocs": {
               "url": "https://www.w3.org/TR/xmlschema-2/#date",
               "description": "3.2.9 date - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
-            }
-          },
-          {
-            "title": "DateTime",
-            "type": "string",
-            "format": "date-time",
-            "default": "9999-12-31T23:59:59.000Z",
-            "example": "2023-02-14T12:15:36-05:00",
-            "externalDocs": {
-              "url": "https://www.w3.org/TR/xmlschema-2/#duration",
-              "description": "3.2.7 dateTime - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
             }
           }
         ],
@@ -423,7 +403,12 @@
               "periodes": {
                 "$ref": "#/components/schemas/LabelsMap"
               }
-            }
+            },
+            "required": [
+              "bibs",
+              "services",
+              "periodes"
+            ]
           }
         },
         "required": [
@@ -456,48 +441,27 @@
         "additionalProperties": {
           "type": "string"
         },
-        "description": "Un objet contenant une série de valeurs key/value de type:\n```\n/**\n * @type {Object.<string, string>}\n */\n ```"
-      },
-      "Periode": {
-        "title": "Periode",
-        "x-stoplight": {
-          "id": "22da1f96dc8bb"
-        },
-        "type": "object",
-        "description": "Décrit un type de période",
-        "properties": {
-          "label": {
-            "type": "string"
-          },
-          "order": {
-            "type": "integer",
-            "description": "Le numéro d'ordre de tri"
-          },
-          "key": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "label",
-          "order",
-          "key"
-        ],
-        "x-internal": true
-      },
-      "Periodes": {
-        "type": "object",
-        "description": "Objet JSON contenant la liste de touts les types de périodes pour les horaires demandés",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/Periode"
-        },
-        "title": "Tableau des types de périodes",
+        "description": "Un objet contenant une série de valeurs key/value de type:\n```\n/**\n * @type {Object.<string, string>}\n */\n ```",
         "x-examples": {
           "Example 1": {
-            "regulier": "Régulier"
+            "property1": "string",
+            "property2": "string"
           }
-        },
-        "x-stoplight": {
-          "id": "f9175c6c41e7d"
+        }
+      },
+      "Periodes": {
+        "$ref": "#/components/schemas/LabelsMap",
+        "x-examples": {
+          "Example 1": {
+            "regulier": "Régulier",
+            "ete": "Session d'été (mai-juin)",
+            "ete1": "Horaire d'été",
+            "intra": "Horaire prolongé mi-session",
+            "fetes": "Période des fêtes",
+            "examens-finaux": "Horaire prolongé – Finaux",
+            "examens-mi-session": "Horaire prolongé – Mi-session",
+            "ferie": "Férié"
+          }
         }
       },
       "Service": {
@@ -523,25 +487,59 @@
           "label",
           "order",
           "key"
-        ]
-      },
-      "Services": {
-        "type": "object",
-        "description": "Objet JSON contenant la liste de touts les types de services pour les horaires demandés",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/Service"
-        },
-        "title": "Tableau des types de services",
+        ],
         "x-examples": {
           "Example 1": {
-            "regulier": "Heures d'ouverture",
-            "reference": "Référence",
-            "services": "Services",
-            "soutien-informatique": "Soutien informatique"
+            "label": "Prêt",
+            "order": 6,
+            "key": "pret"
+          }
+        }
+      },
+      "Services": {
+        "x-examples": {
+          "Example 1": {
+            "regulier": {
+              "label": "Heures d'ouverture",
+              "order": 1,
+              "key": "regulier"
+            },
+            "services": {
+              "label": "Services",
+              "order": 3,
+              "key": "services"
+            },
+            "reference": {
+              "label": "Référence",
+              "order": 4,
+              "key": "reference"
+            },
+            "soutien-informatique": {
+              "label": "Soutien informatique",
+              "order": 5,
+              "key": "soutien-informatique"
+            },
+            "pret": {
+              "label": "Prêt",
+              "order": 6,
+              "key": "pret"
+            },
+            "mediatheque": {
+              "label": "Médiathèque J.-A.-DeSève",
+              "order": 7,
+              "key": "mediatheque"
+            },
+            "sdaesh": {
+              "label": "Soutien SDAESH",
+              "order": 8,
+              "key": "sdaesh"
+            }
           }
         },
-        "x-stoplight": {
-          "id": "21d422b818f00"
+        "description": "Une liste de types de services",
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/Service"
         }
       }
     },
@@ -667,9 +665,9 @@
         "in": "query",
         "required": false,
         "schema": {
-          "$ref": "#/components/schemas/DateTimeOrDurationFin"
+          "$ref": "#/components/schemas/DateOrDurationFin"
         },
-        "description": "Une date `xs:date`, une date/heure `xs:dateTime` ou une durée `xs:duration`.\nValeur par défaut: `275760-09-13T00:00:00.000Z` (ce qui correspond à : \n`new Date(8640000000000000)`.\nSi la valeur est une durée, alors la date de fin est calculée en additionnant cette durée à la date de début"
+        "description": "Une date `xs:date` ou une durée `xs:duration`.\nValeur par défaut: `275760-09-13T00:00:00.000Z` (ce qui correspond à : \n`new Date(8640000000000000)`.\nSi la valeur est une durée, alors la date de fin est calculée en additionnant cette durée à la date de début"
       },
       "bib": {
         "name": "bib",
@@ -685,9 +683,9 @@
         "in": "query",
         "required": false,
         "schema": {
-          "$ref": "#/components/schemas/DateTimeOrDurationDebut"
+          "$ref": "#/components/schemas/DateOrDurationDebut"
         },
-        "description": "Une date `xs:date`, une date/heure `xs:dateTime` ou une durée `xs:duration`. Valeur par défaut: le jour courant. Si la valeur est une durée, alors la date de début est calculée à partir de la date courante, zéro heure locale. Par exemple, `2023-02-14T00:00:00-05:00`"
+        "description": "Une date `xs:date` ou une durée `xs:duration`. Valeur par défaut: le jour courant. Si la valeur est une durée, alors la date de début est calculée à partir de la date courante, zéro heure locale. Par exemple, `2023-02-14T00:00:00-05:00`"
       },
       "ouvert": {
         "name": "ouvert",
