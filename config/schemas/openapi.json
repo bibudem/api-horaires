@@ -53,7 +53,7 @@
     },
     "/services": {
       "get": {
-        "summary": "Retourne la liste des services ayant un horaire",
+        "summary": "Liste des services ayant un horaire",
         "tags": [],
         "responses": {
           "200": {
@@ -66,7 +66,7 @@
     },
     "/periodes": {
       "get": {
-        "summary": "Retourne la liste des périodes",
+        "summary": "Liste des types de périodes",
         "tags": [],
         "responses": {
           "200": {
@@ -114,8 +114,8 @@
           }
         },
         "operationId": "getHoraires",
-        "summary": "Retourne les horaires",
-        "description": "Trouve des horaires en filtrant par bibliothèque et période.\n",
+        "summary": "Liste des horaires",
+        "description": "Trouve des horaires en filtrant par bibliothèque et période.\nRetourne les résultats en format `JSON`ou `iCalendar` (ics)\n",
         "x-internal": false,
         "tags": [
           "Horaires"
@@ -137,7 +137,7 @@
             "$ref": "#/components/responses/InternalErrorResponse"
           }
         },
-        "summary": "Retourne une liste de nouvelles acquisitions pour une discipline donné",
+        "summary": "Liste des horaires d'une bibliothèque",
         "description": "Retourne des horaires pour une bibliothèque donnée.",
         "operationId": "getHoraireByBib",
         "tags": [
@@ -180,7 +180,7 @@
             "$ref": "#/components/responses/InternalErrorResponse"
           }
         },
-        "summary": "Retourne un fil RSS de nouvelles acquisitions pour une discipline donné",
+        "summary": "Liste des horaires d'une bibliothèque (iCalendar)",
         "description": "Retourne les horaires d'une bibliothèque donnée au format [iCalendar](https://www.rfc-editor.org/rfc/rfc5545.html).",
         "operationId": "getHoraireByBibICS",
         "tags": [
