@@ -448,18 +448,6 @@
       },
       "Periodes": {
         "$ref": "#/components/schemas/LabelsMap",
-        "x-examples": {
-          "Example 1": {
-            "regulier": "Régulier",
-            "ete": "Session d'été (mai-juin)",
-            "ete1": "Horaire d'été",
-            "intra": "Horaire prolongé mi-session",
-            "fetes": "Période des fêtes",
-            "examens-finaux": "Horaire prolongé – Finaux",
-            "examens-mi-session": "Horaire prolongé – Mi-session",
-            "ferie": "Férié"
-          }
-        }
       },
       "Service": {
         "title": "Service",
