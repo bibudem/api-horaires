@@ -191,7 +191,7 @@
   },
   "components": {
     "schemas": {
-      "bibsMap": {
+      "BibsMap": {
         "type": "object",
         "description": "Objet JSON contenant la liste de toutes les bibliothèques ayant un horaire",
         "additionalProperties": {
@@ -222,6 +222,9 @@
             "sciences": "Bibliothèque des sciences",
             "ss": "Bibliothèque des lettres et sciences humaines"
           }
+        },
+        "x-stoplight": {
+          "id": "50440824d74ef"
         }
       },
       "DateTimeOrDuration": {
@@ -247,12 +250,12 @@
           "Le dernier mois": "P1M"
         }
       },
-      "horaire": {
+      "Horaire": {
         "type": "object",
         "title": "Horaire",
         "description": "Un objet contenant un horaire d'une bibliothèque ou d'un service",
         "x-stoplight": {
-          "id": "768f5c6f55e11"
+          "id": "f5e2f849edcae"
         },
         "properties": {
           "id": {
@@ -290,12 +293,12 @@
           "id"
         ]
       },
-      "horaireMap": {
+      "Horaires": {
         "type": "object",
         "title": "Liste d'horaires",
         "description": "Une liste d'horaires",
         "x-stoplight": {
-          "id": "9548bdfc78bc7"
+          "id": "c870347dac8ef"
         },
         "x-examples": {
           "Example 1": {
@@ -361,7 +364,7 @@
           "evenements": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/horaire"
+              "$ref": "#/components/schemas/Horaire"
             }
           },
           "labels": {
@@ -369,46 +372,23 @@
             "description": "Objet contenant les libellés des bibliothèques, services et périodes disponibles dans cette liste d'horaires",
             "properties": {
               "bibs": {
-                "$ref": "#/components/schemas/bibsMap"
+                "$ref": "#/components/schemas/BibsMap"
               },
               "services": {
-                "$ref": "#/components/schemas/servicesMap"
+                "$ref": "#/components/schemas/ServicesMap"
               },
               "periodes": {
-                "$ref": "#/components/schemas/periodesMap"
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/Periode"
+                }
               }
             }
           }
-        }
-      },
-      "horaireList": {
-        "type": "object",
-        "properties": {
-          "total": {
-            "type": "number"
-          },
-          "evenements": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/horaire"
-            }
-          },
-          "labels": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "bibs": {
-                "type": "object"
-              },
-              "services": {
-                "type": "object"
-              },
-              "periodes": {
-                "type": "object"
-              }
-            }
-          }
-        }
+        },
+        "required": [
+          "total"
+        ]
       },
       "HttpStatusCode": {
         "title": "Code HTTP",
@@ -419,7 +399,7 @@
         "example": 200,
         "description": ""
       },
-      "ICSType": {
+      "HorairesICS": {
         "title": "Fichier iCalendar",
         "x-stoplight": {
           "id": "34e78d7e55ab0"
@@ -430,10 +410,10 @@
           "Fichier iCalendar": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Direction des bibliothèques - Université de Montréal//API hora\n ires v1.0.0//EN\nCALSCALE:GREGORIAN\nX-WR-TIMEZONE:America/Montreal\nX-PUBLISHED-TTL:P1H\nBEGIN:VTIMEZONE\nTZID:America/Montreal\nBEGIN:DAYLIGHT\nTZNAME:EDT\nDTSTART:19700308T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\nTZOFFSETFROM:-0500\nTZOFFSETTO:-0400\nEND:DAYLIGHT\nBEGIN:STANDARD\nTZNAME:EST\nDTSTART:19701101T020000Z\nRRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\nTZOFFSETFROM:-0400\nTZOFFSETTO:-0500\nEND:STANDARD\nEND:VTIMEZONE\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227723@bib.umontreal.ca\nDTSTART:20180611T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227724@bib.umontreal.ca\nDTSTART:20180612T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nBEGIN:VEVENT\nDTSTAMP:20180611T162239Z\nUID:227725@bib.umontreal.ca\nDTSTART:20180613T130000Z\nDURATION:PT8H\nSUMMARY:9 h à 17 h\nLOCATION:Bibliothèque d'aménagement - Horaire de la bibliothèque\nEND:VEVENT\nEND:VCALENDAR\n"
         }
       },
-      "periode": {
+      "Periode": {
         "title": "periode",
         "x-stoplight": {
-          "id": "kwy5vuei12lv0"
+          "id": "22da1f96dc8bb"
         },
         "type": "object",
         "properties": {
@@ -448,11 +428,11 @@
           }
         }
       },
-      "periodesMap": {
+      "PeriodesMap": {
         "type": "object",
         "description": "Objet JSON contenant la liste de touts les types de périodes pour les horaires demandés",
         "additionalProperties": {
-          "$ref": "#/components/schemas/periode"
+          "$ref": "#/components/schemas/Periode"
         },
         "title": "Tableau des types de périodes",
         "x-examples": {
@@ -461,14 +441,38 @@
           }
         },
         "x-stoplight": {
-          "id": "b30332801108c"
+          "id": "e89b93ce18f83"
         }
       },
-      "servicesMap": {
+      "Service": {
+        "title": "Service",
+        "x-stoplight": {
+          "id": "vvmck7m7bb3hj"
+        },
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "order": {
+            "type": "integer"
+          },
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "order",
+          "key"
+        ],
+        "description": "Un objet contenant la description d'un service"
+      },
+      "ServicesMap": {
         "type": "object",
         "description": "Objet JSON contenant la liste de touts les types de services pour les horaires demandés",
         "additionalProperties": {
-          "type": "string"
+          "$ref": "#/components/schemas/Service"
         },
         "title": "Tableau des types de services",
         "x-examples": {
@@ -480,7 +484,7 @@
           }
         },
         "x-stoplight": {
-          "id": "23f0a7d9c13b6"
+          "id": "642f2312ba91d"
         }
       }
     },
@@ -490,7 +494,14 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/horaireMap"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/Horaires"
+                },
+                {
+                  "$ref": "#/components/schemas/HorairesICS"
+                }
+              ]
             },
             "examples": {
               "Example 1": {
@@ -526,7 +537,7 @@
           },
           "text/calendar": {
             "schema": {
-              "$ref": "#/components/schemas/ICSType"
+              "$ref": "#/components/schemas/HorairesICS"
             }
           }
         }
@@ -536,7 +547,7 @@
         "content": {
           "text/calendar": {
             "schema": {
-              "$ref": "#/components/schemas/ICSType"
+              "$ref": "#/components/schemas/HorairesICS"
             }
           }
         }
@@ -567,7 +578,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/bibsMap"
+              "$ref": "#/components/schemas/BibsMap"
             }
           }
         }
@@ -577,7 +588,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/servicesMap"
+              "$ref": "#/components/schemas/ServicesMap"
             }
           }
         }
@@ -587,7 +598,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/periodesMap"
+              "$ref": "#/components/schemas/PeriodesMap"
             }
           }
         }
