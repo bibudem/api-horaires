@@ -459,22 +459,30 @@
         "description": "Un objet contenant une série de valeurs key/value de type:\n```\n/**\n * @type {Object.<string, string>}\n */\n ```"
       },
       "Periode": {
-        "title": "periode",
+        "title": "Periode",
         "x-stoplight": {
           "id": "22da1f96dc8bb"
         },
         "type": "object",
+        "description": "Décrit un type de période",
         "properties": {
           "label": {
             "type": "string"
           },
           "order": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Le numéro d'ordre de tri"
           },
           "key": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "label",
+          "order",
+          "key"
+        ],
+        "x-internal": true
       },
       "Periodes": {
         "type": "object",
@@ -498,12 +506,14 @@
           "id": "vvmck7m7bb3hj"
         },
         "type": "object",
+        "description": "Un objet contenant la description d'un service",
         "properties": {
           "label": {
             "type": "string"
           },
           "order": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Le numéro d'ordre de tri"
           },
           "key": {
             "type": "string"
@@ -513,8 +523,7 @@
           "label",
           "order",
           "key"
-        ],
-        "description": "Un objet contenant la description d'un service"
+        ]
       },
       "Services": {
         "type": "object",
