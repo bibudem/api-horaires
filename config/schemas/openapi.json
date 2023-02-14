@@ -28,9 +28,6 @@
       "name": "Horaires par bibliothèque"
     },
     {
-      "name": "iCalendar"
-    },
-    {
       "name": "Liste de code de bibliothèque"
     },
     {
@@ -131,8 +128,7 @@
         "description": "Trouve des horaires en filtrant par bibliothèque et période.\nRetourne les résultats en format `JSON`ou `iCalendar` (ics)\n",
         "x-internal": false,
         "tags": [
-          "Horaires",
-          "iCalendar"
+          "Horaires"
         ]
       }
     },
@@ -198,8 +194,7 @@
         "description": "Retourne les horaires d'une bibliothèque donnée au format [iCalendar](https://www.rfc-editor.org/rfc/rfc5545.html).",
         "operationId": "getHoraireByBibICS",
         "tags": [
-          "Horaires par bibliothèque",
-          "iCalendar"
+          "Horaires par bibliothèque"
         ]
       }
     }
