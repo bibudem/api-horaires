@@ -599,7 +599,7 @@
         "schema": {
           "$ref": "#/components/schemas/DateTimeOrDuration"
         },
-        "description": "xs:dateTime ou xs:duration. Valeur par défaut: 9999-12-31T23:59:59-05:00. \t\t\t\t   Si on ne spécifie pas la date de fin, le service retourne toutes les \t\t\t\t   dates qu'il contient à partir de la date de début indiquée. Si la \t\t\t\t   valeur est une durée, alors la date de fin est calculée en additionnant \t\t\t\t   cette durée à la date de début"
+        "description": "`xs:dateTime` ou `xs:duration`.Valeur par défaut: `275760-09-13T00:00:00.000Z` (ce qui correspond à : \\n`new Date(8640000000000000)`. Si la valeur est une durée, alors la date de fin est calculée en additionnant cette durée à la date de début"
       },
       "bib": {
         "name": "bib",
@@ -615,7 +615,9 @@
         "in": "query",
         "required": false,
         "schema": {
-          "$ref": "#/components/schemas/DateTimeOrDuration"
+          "$ref": "#/components/schemas/DateTimeOrDuration",
+          "type": "string",
+          "format": "dateTimeOrDuration"
         },
         "description": "xs:dateTime ou xs:duration. Valeur par défaut: le jour courant. \t\t\t\t   Si la valeur est une durée, alors la date de début est calculée à \t\t\t\t   partir de la date courante"
       },
