@@ -132,34 +132,6 @@
         ]
       }
     },
-    "/{bib}": {
-      "summary": "Liste les nouvelles acquisitions pour une discipline",
-      "get": {
-        "parameters": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/HorairesResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/RequestValidationError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalErrorResponse"
-          }
-        },
-        "summary": "Liste des horaires d'une bibliothèque",
-        "description": "Retourne des horaires pour une bibliothèque donnée.",
-        "operationId": "getHoraireByBib",
-        "tags": [
-          "Horaires par bibliothèque"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/bib"
-        }
-      ]
-    },
     "/{bib}.{format}": {
       "summary": "Liste les nouvelles acquisitions pour une discipline",
       "parameters": [
@@ -197,6 +169,34 @@
           "Horaires par bibliothèque"
         ]
       }
+    },
+    "/{bib}": {
+      "summary": "Liste les nouvelles acquisitions pour une discipline",
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/HorairesResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/RequestValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalErrorResponse"
+          }
+        },
+        "summary": "Liste des horaires d'une bibliothèque",
+        "description": "Retourne des horaires pour une bibliothèque donnée.",
+        "operationId": "getHoraireByBib",
+        "tags": [
+          "Horaires par bibliothèque"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/bib"
+        }
+      ]
     }
   },
   "components": {
