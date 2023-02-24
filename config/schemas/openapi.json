@@ -236,6 +236,17 @@
       },
       "DateOrDurationFin": {
         "title": "DateOrDurationFin",
+        "x-examples": {
+          "Une date": "2014-06-06",
+          "Une date/heure": "2020-06-06T13:00:00-05:00",
+          "Une durée d'une journée": "P1D",
+          "Les dernière 48 heures": "PT48H",
+          "Le dernier mois": "P1M"
+        },
+        "x-stoplight": {
+          "id": "d2932e3502bb4"
+        },
+        "type": "string",
         "oneOf": [
           {
             "title": "Duration",
@@ -255,18 +266,7 @@
               "description": "3.2.9 date - XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004"
             }
           }
-        ],
-        "type": "string",
-        "x-examples": {
-          "Une date": "2014-06-06",
-          "Une date/heure": "2020-06-06T13:00:00-05:00",
-          "Une durée d'une journée": "P1D",
-          "Les dernière 48 heures": "PT48H",
-          "Le dernier mois": "P1M"
-        },
-        "x-stoplight": {
-          "id": "d2932e3502bb4"
-        }
+        ]
       },
       "Horaire": {
         "type": "object",
@@ -811,7 +811,8 @@
         },
         "description": "Le format demandé: `text/calendar` ou `application/json`"
       }
-    }
+    },
+    "securitySchemes": {}
   },
   "servers": [
     {
