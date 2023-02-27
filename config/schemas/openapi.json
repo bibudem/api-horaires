@@ -38,6 +38,9 @@
     }
   ],
   "paths": {
+    "/about": {
+      "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
+    },
     "/liste": {
       "get": {
         "summary": "Retourne la liste des bibliothèques ayant un horaire",
@@ -86,9 +89,6 @@
         "operationId": "listPeriodes",
         "description": "Retourne un objet contenant la liste des types de périodes"
       }
-    },
-    "/about": {
-      "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
     },
     "/": {
       "get": {
