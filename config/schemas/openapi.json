@@ -39,7 +39,26 @@
   ],
   "paths": {
     "/about": {
-      "$ref": "https://raw.githubusercontent.com/bibudem/api-communs/main/src/about.json#/paths/~1about"
+      "get": {
+        "tags": [
+          "À propos"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getAbout",
+        "summary": "Retourne des informations à propos de l'API",
+        "description": "Affiche le nom, la version et l'environnement d'exécution de l'API"
+      }
     },
     "/liste": {
       "get": {
