@@ -1,0 +1,30 @@
+{
+	"regulier": {
+		"label": "Heures d'ouverture",
+		"order": 1
+	},
+	"services": {
+		"label": "Services",
+		"order": 3
+	},
+	"reference": {
+		"label": "Référence",
+		"order": 4
+	},
+	"soutien-informatique": {
+		"label": "Soutien informatique",
+		"order": 5
+	},
+	"pret": {
+		"label": "Prêt",
+		"order": 6
+	},
+	"mediatheque": {
+		"label": "Médiathèque J.-A.-DeSève",
+		"order": 7
+	},
+	"sdaesh": {
+		"label": "Soutien SDAESH",
+		"order": 8
+	}
+}
