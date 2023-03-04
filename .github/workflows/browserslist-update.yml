@@ -1,0 +1,4 @@
+# Source: https://github.com/c2corg/browserslist-update-action
+
+- name: browserslist-update-action
+  uses: c2corg/browserslist-update-action@v2.2.2
