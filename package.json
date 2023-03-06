@@ -44,7 +44,7 @@
     "jsonwebtoken": "^9.0.0",
     "lodash-es": "^4.17.21",
     "luxon": "^3.2.1",
-    "mysql2": "^3.1.1",
+    "mysql2": "^3.2.0",
     "node-global-proxy": "^1.0.1",
     "p-progress": "^0.6.0",
     "passport": "^0.6.0",
