@@ -1,0 +1,46 @@
+<div class="container my-5">
+  <h1>Horaires - admin</h1>
+  <form class="submit-form" action="../import" method="POST">
+    <p>Importe de LibCAL tous les horaires des bibliothèques et leurs services pour les 52 semaines à venir. Les jours où il n'y a pas d'horaire définit seront ignorés.</p>
+
+    <button class="submit-btn btn btn-primary btn-lg my-4" type="submit">Importer les horaires</button>
+
+    <div class="progress-bar-container">
+      <smart-progress-bar id="import-progress" hidden></smart-progress-bar>
+    </div>
+  </form>
+
+  <div class="status-container collapsed">
+    <div class="status note"></div>
+  </div>
+
+  <hr class="mt-4">
+
+  <h2 class="my-5">Liste des bibliothèques présentes dans le service</h2>
+
+  <div class="table-responsive">
+    <table class="table table-light">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Bibliothèque</th>
+        </tr>
+      </thead>
+      <tbody id="liste-bibs"></tbody>
+    </table>
+  </div>
+
+  <h2 class="my-4">Liste des types de services</h2>
+
+  <div class="table-responsive">
+    <table class="table table-light">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Service</th>
+        </tr>
+      </thead>
+      <tbody id="liste-services"></tbody>
+    </table>
+  </div>
+</div>

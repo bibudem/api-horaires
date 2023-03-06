@@ -4,7 +4,11 @@
   "description": "Service REST pour les heures d'ouvertures des services de la Direction des bibliothèques, Université de Montréal",
   "type": "module",
   "scripts": {
-    "dev": "nodemon"
+    "vite": "vite",
+    "dev_": "nodemon --verbose --ignore '**\\*.mjs'",
+    "dev": "nodemon --watch config --watch app --ext js,cjs,mjs,json",
+    "build": "vite build",
+    "preview": "cross-env NODE_ENV=production npm run dev"
   },
   "repository": {
     "type": "git",
@@ -33,6 +37,7 @@
     "cors": "^2.8.5",
     "es6-template-strings": "^2.0.1",
     "express": "^4.18.2",
+    "express-handlebars": "^7.0.1",
     "express-session": "^1.17.3",
     "helmet": "^6.0.1",
     "icalendar": "^0.7.1",
@@ -48,9 +53,17 @@
     "passport-jwt": "^4.0.1",
     "sqlstring": "^2.3.3",
     "tinyduration": "^3.2.4",
-    "tracer": "^1.1.6"
+    "tracer": "^1.1.6",
+    "vite-express": "^0.3.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "cross-env": "^7.0.3",
+    "mdb-ui-kit": "^6.2.0",
+    "nodemon": "^2.0.20",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.4",
+    "smart-webcomponents": "^15.0.11",
+    "vite": "^4.1.4",
+    "vite-plugin-svgo": "^1.2.0"
   }
 }

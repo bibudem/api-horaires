@@ -1,0 +1,20 @@
+// scss-docs-start theme-color-variables
+$primary: #3f729b !default;
+// $secondary: #9fa6b2 !default;
+// $success: #14a44d !default;
+// $danger: #dc4c64 !default;
+// $warning: #e4a11b !default;
+// $info: #54b4d3 !default;
+// $light: #fbfbfb !default;
+// $dark: #332d2d !default;
+// scss-docs-end theme-color-variables
+
+$font-family-monospace: 'Roboto Mono', monospace;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1140px,
+);

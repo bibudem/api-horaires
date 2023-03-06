@@ -1,4 +1,6 @@
 import express from 'express'
+import ViteExpress from 'vite-express'
+import { engine } from 'express-handlebars'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import chalk from 'chalk'
@@ -8,20 +10,44 @@ import adminRoute from './routes/admin.route.js'
 import apiRoutes from './routes/api.route.js'
 import importRoute from './routes/import.route.js'
 
-const app = express();
+const app = express()
+
+const mode = process.env.NODE_ENV.endsWith('production') ? 'production' : 'development'
+ViteExpress.config({ mode })
+
+/*
+ * App configs
+ */
 
 app.set('port', config.get('app.port'))
-app.disable('x-powered-by');
+app.disable('x-powered-by')
+app.engine(
+  'hbs',
+  engine({
+    extname: '.hbs',
+    helpers: {
+      ifEquals(arg1, arg2, options) {
+        return arg1 == arg2 ? options.fn(this) : options.inverse(this)
+      },
+    },
+  })
+)
+app.set('view engine', 'hbs')
+app.set('views', './app/views')
+app.locals.basePath = (url => (url.pathname === '/' ? '' : url.pathname))(new URL(config.get('app.baseUrl')))
+app.locals.mode = mode
 
 /*
  * Middlewares
  */
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(webLogger({
-  logDirectory: config.get('log.dir')
-}));
+app.use(cors())
+app.use(bodyParser.json())
+app.use(
+  webLogger({
+    logDirectory: config.get('log.dir'),
+  })
+)
 
 /*
  * Admin UI
@@ -31,9 +57,12 @@ app.use(/^\/admin$/, function (req, res, next) {
   res.redirect(config.get('app.baseUrl') + '/admin/')
 })
 
-app.use('/admin/'/*, auth.ensureAuthenticated({
+app.use(
+  '/admin/' /*, auth.ensureAuthenticated({
   service: '/connexion/cas'
-})*/, adminRoute)
+})*/,
+  adminRoute
+)
 
 // app.use('/connexion', connexionRoute)
 
@@ -49,6 +78,12 @@ app.use(apiRoutes)
  * Start Express server.
  */
 
-app.listen(app.get('port'), () => {
-  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
-});
+// if (process.env.NODE_ENV.endsWith('production')) {
+//   app.listen(app.get('port'), () => {
+//     console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'))
+//   })
+// } else {
+ViteExpress.listen(app, app.get('port'), () => {
+  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'))
+})
+// }

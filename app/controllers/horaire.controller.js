@@ -3,7 +3,6 @@ import { Horaire, HorairesImporter } from '../models/horaire.js'
 import console from '../lib/console.js'
 
 export async function getHoraire(req, res, next) {
-
   const bib = req.params.bib || req.query.bib
 
   const format = req.format
@@ -16,7 +15,7 @@ export async function getHoraire(req, res, next) {
       // JSON format
       return res.json(evenements)
     } else {
-      res.setHeader("Content-Type", "text/calendar");
+      res.setHeader('Content-Type', 'text/calendar')
       res.send(evenements.toICS())
     }
   } catch (error) {
@@ -27,23 +26,25 @@ export async function getHoraire(req, res, next) {
 export async function postImport(req, res, next) {
   const horairesImporter = new HorairesImporter()
 
-  horairesImporter.on('progress', throttle(progress => {
-    res.write(`progress:${progress}`)
-  }, 100))
+  horairesImporter.on(
+    'progress',
+    throttle(progress => {
+      res.write(`progress:${progress}`)
+    }, 100)
+  )
+
+  res.setHeader('Content-Type', 'application/json')
 
   try {
-
-    res.setHeader('Content-Type', 'text/html')
-
     const result = await horairesImporter.import()
 
     res.write(`result:${JSON.stringify(result)}`)
-    res.end()
-
-    console.log('result: ', result)
   } catch (error) {
-    console.error('error ', error)
-    next(error)
+    console.error('error: ', error)
+
+    res.status(error.status).write(`result:${JSON.stringify(error)}`)
+  } finally {
+    res.end()
   }
 }
 

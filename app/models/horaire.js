@@ -5,7 +5,6 @@ import config from 'config'
 import codeBibs from 'code-bib'
 import nodeGlobalProxy from 'node-global-proxy'
 import { connection, rwConnection } from '../db/index.js'
-import { ImportHoraires } from '../lib/import-horaires.js'
 import { formatHour } from '../lib/dateTime-utils.js'
 import { toICS } from '../lib/to-ICS.js'
 import console from '../lib/console.js'
@@ -30,16 +29,14 @@ const proxy = nodeGlobalProxy.default
 // Setting up proxy if needed
 
 if (config.get('httpClient.proxy')) {
-
   console.debug('Using proxy settings')
 
   proxy.setConfig(config.get('httpClient.proxy'))
   proxy.start()
-
 }
 
-const bibLabels = new Map();
-const servicesLabels = new Map();
+const bibLabels = new Map()
+const servicesLabels = new Map()
 
 // patch
 codeBibs.mi.court = 'Mathématiques et informatique'
@@ -51,10 +48,10 @@ Object.keys(codeBibs).forEach(codeBib => {
 
 Object.keys(services).forEach(serviceKey => {
   servicesLabels.set(services[serviceKey].label, serviceKey)
-});
+})
 
 function toUID(id) {
-  return id + '@bib.umontreal.ca';
+  return id + '@bib.umontreal.ca'
 }
 
 function setOrder() {
@@ -64,8 +61,12 @@ function setOrder() {
   bibliotheque,
   date,
   (
-    CASE LOWER(service)${Object.keys(services).map(key => `
-      WHEN '${key.toLowerCase()}' THEN ${services[key].order || servicesLength}`).join(' ')}
+    CASE LOWER(service)${Object.keys(services)
+      .map(
+        key => `
+      WHEN '${key.toLowerCase()}' THEN ${services[key].order || servicesLength}`
+      )
+      .join(' ')}
       ELSE ${servicesLength}
     END
   )`
@@ -74,7 +75,7 @@ function setOrder() {
 /**
  * Un code de bibliothèque ou une liste de codes de bibliothèque
  * @typedef {string|string[]|null} bibParam
- * 
+ *
  */
 
 /**
@@ -84,7 +85,6 @@ function setOrder() {
  * @class Horaire
  */
 export class Horaire {
-
   /**
    *
    *
@@ -94,17 +94,11 @@ export class Horaire {
    * @param {string} [params.debut] - La date de début
    * @param {string} [params.fin] - La date de fin
    * @param {boolean} [ouvert = false] - Filtre uniquement les horaires dont les bibliothèques sont ouvertes en ce moment ou non
-   * 
+   *
    * @returns
    * @memberof Horaire
    */
-  static async get({
-    bib = null,
-    debut = DateTime.fromISO({ hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }).toSQLDate(),
-    fin = DateTime.local(9999, 12, 31, 23, 59, 59, 999).toSQLDate(),
-    ouvert = false
-  }) {
-
+  static async get({ bib = null, debut = DateTime.fromISO({ hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }).toSQLDate(), fin = DateTime.local(9999, 12, 31, 23, 59, 59, 999).toSQLDate(), ouvert = false }) {
     let query = ''
     let bibCondition = ''
     let select = `SELECT
@@ -123,7 +117,7 @@ FROM
 WHERE`
 
     if (typeof bib === 'string') {
-      bib = [bib];
+      bib = [bib]
     }
 
     if (bib && bib.length) {
@@ -161,7 +155,7 @@ UNION
 ${setOrder()};`
     }
 
-    const [rows] = await connection.execute(query);
+    const [rows] = await connection.execute(query)
 
     return new Horaire(rows, { ouvert })
   }
@@ -175,7 +169,7 @@ ${setOrder()};`
   //  * @param {string} [params.debut] - La date de début
   //  * @param {string} [params.fin] - La date de fin
   //  * @param {boolean} [ouvert = false] - Filtre uniquement les horaires dont les bibliothèques sont ouvertes en ce moment ou non
-  //  * 
+  //  *
   //  * @returns
   //  * @memberof Horaire
   //  */
@@ -194,16 +188,14 @@ ${setOrder()};`
   // }
 
   constructor(rows, options = {}) {
-
     Object.defineProperty(this, 'total', {
       enumerable: true,
       get() {
         return this.evenements?.length ?? 0
-      }
+      },
     })
 
     if (rows.length > 0) {
-
       const bibKeys = new Map()
       const servicesKeys = new Map()
       const periodesKeys = new Map()
@@ -211,7 +203,6 @@ ${setOrder()};`
       const evenements = []
 
       for (const row of rows) {
-
         const event = new Evenement(row)
 
         if ((event.debut1 === '' && event.fin2 === '') || (event.debut1 === null && event.fin2 === null)) {
@@ -230,13 +221,12 @@ ${setOrder()};`
       }
 
       if (evenements.length) {
-
         this.evenements = evenements
 
         this.labels = {
           bibs: {},
           services: {},
-          periodes: {}
+          periodes: {},
         }
 
         bibKeys.forEach((v, k) => {
@@ -250,7 +240,6 @@ ${setOrder()};`
         periodesKeys.forEach((v, k) => {
           this.labels.periodes[k] = v
         })
-
       }
     }
   }
@@ -262,78 +251,73 @@ ${setOrder()};`
 
 export default class Evenement {
   constructor(data) {
-
     if (!codeBibs.hasOwnProperty(data.bibliotheque)) {
       const msg = `The requested bib cannot be found in module 'code-bib': ${data.bibliotheque}.`
-      throw (msg);
+      throw msg
     }
 
     if (!services.hasOwnProperty(data.service)) {
-      const msg = `The service '${data.service}' found in record id=${data.id} does not match any configs. ${JSON.stringify(data)}`;
-      throw (msg);
+      const msg = `The service '${data.service}' found in record id=${data.id} does not match any configs. ${JSON.stringify(data)}`
+      throw msg
     }
 
     if (!periodes.hasOwnProperty(data.periode)) {
-      const msg = `The periode '${data.periode}' found in record id=${data.id} does not match any configs. ${JSON.stringify(data)}`;
-      throw (msg);
+      const msg = `The periode '${data.periode}' found in record id=${data.id} does not match any configs. ${JSON.stringify(data)}`
+      throw msg
     }
 
-    Object.assign(this, data);
-
-    ['debut1', 'fin1', 'debut2', 'fin2'].forEach(key => {
+    Object.assign(this, data)
+    ;['debut1', 'fin1', 'debut2', 'fin2'].forEach(key => {
       if (key in this && this[key] === null) {
-        this[key] = '';
+        this[key] = ''
       }
-    });
+    })
 
     if (typeof this.sommaire === 'undefined' || this.sommaire === null) {
-
-      let sommaire;
+      let sommaire
 
       // Champ 'sommaire'
       if (this.debut1 === '' && this.fin2 === '') {
-        sommaire = 'fermé';
+        sommaire = 'fermé'
       } else if (this.debut1 === '00:00' && this.fin2 === '24:00') {
-        sommaire = 'ouvert 24h';
+        sommaire = 'ouvert 24h'
       } else {
-        sommaire = `${formatHour(this.debut1)} à\xA0`;
+        sommaire = `${formatHour(this.debut1)} à\xA0`
         if (this.fin1 !== '' && this.debut2 !== '') {
-          sommaire += `${formatHour(this.fin1)}\xA0et ${formatHour(this.debut2)} à\xA0`;
+          sommaire += `${formatHour(this.fin1)}\xA0et ${formatHour(this.debut2)} à\xA0`
         }
-        sommaire += formatHour(this.fin2);
+        sommaire += formatHour(this.fin2)
       }
 
-      this.sommaire = sommaire;
+      this.sommaire = sommaire
     }
-    this.id = toUID(data.id);
+    this.id = toUID(data.id)
   }
 }
 
 export class HorairesImporter extends EventEmitter {
-
   async import() {
-
     const result = {
       insertedRows: 0,
       updatedRows: 0,
-      errorMessages: []
+      minDate: null,
+      maxDate: null,
+      errorMessages: [],
     }
 
     try {
-      const data = await axios.get('https://umontreal.libcal.com/widget/hours/grid?iid=4151&format=json&weeks=52&systemTime=1')
-        .then(response => {
-          return response.data.locations
-        })
+      const data = await axios.get('https://umontreal.libcal.com/widget/hours/grid?iid=4151&format=json&weeks=52&systemTime=1', { timeout: 10_000 }).then(response => {
+        return response.data.locations
+      })
 
-      const evenements = [];
+      const evenements = []
       const bibs = data.filter(bib => typeof bib.parent_lid === 'undefined')
       const services = data.filter(bib => typeof bib.parent_lid !== 'undefined')
 
       bibs.forEach(iCalBib => {
         if (!bibLabels.has(iCalBib.name)) {
-          // throw new Error(`The library \`${iCalBib.name}\` (lid #${iCalBib.lid}) is unknown.`);
-          result.errorMessages.push(`La bibliothèque \`${iCalBib.name}\` (lid #${iCalBib.lid}) est inconnue.`);
-          return;
+          result.errorMessages.push(`La bibliothèque '${iCalBib.name}' (id=${iCalBib.lid}) est inconnue.`)
+          return
         }
 
         //
@@ -344,7 +328,7 @@ export class HorairesImporter extends EventEmitter {
         const evenementTemplate = {
           bibliotheque: codeBib,
           service: 'regulier',
-          periode: 'regulier'
+          periode: 'regulier',
         }
 
         evenements.push(...libCalWeeksToEvenement(iCalBib.weeks, evenementTemplate))
@@ -355,59 +339,33 @@ export class HorairesImporter extends EventEmitter {
 
         services
           // Get all services for this bibliotheque
-          .filter((iCalService) => {
-            return iCalService.parent_lid === iCalBib.lid;
+          .filter(iCalService => {
+            return iCalService.parent_lid === iCalBib.lid
           })
 
           .forEach(iCalService => {
             if (!servicesLabels.has(iCalService.name)) {
-              // throw new Error(`The service \`${iCalService.name}\` (lid #${iCalService.lid}) is unknown.`);
-              result.errorMessages.push(`Le service \`${iCalService.name}\` (lid #${iCalService.lid}) est inconnu.`);
-              return;
+              result.errorMessages.push(`Le service '${iCalService.name}' (id=${iCalService.lid}) est inconnu.`)
+              return
             }
 
             const codeService = servicesLabels.get(iCalService.name)
             const evenementTemplate = {
               bibliotheque: codeBib,
               service: codeService,
-              periode: 'regulier'
+              periode: 'regulier',
             }
 
             evenements.push(...libCalWeeksToEvenement(iCalService.weeks, evenementTemplate))
           })
-      });
+      })
 
-      /*
-        {
-            bibliotheque: 'antenne-paramedicale',
-            service: 'regulier',
-            periode: 'regulier',
-            date: '2023-06-04',
-            debut1: '07:00',
-            fin1: '',
-            debut2: '',
-            fin2: '23:00',
-            sommaire: '7h à 23h'
-          },
-  */
+      result.minDate = evenements[0].date
+      result.maxDate = evenements[evenements.length - 1].date
 
-      /*
- [
-  ResultSetHeader {
-    fieldCount: 0,
-    affectedRows: 1,
-    insertId: 0,
-    info: '',
-    serverStatus: 2,
-    warningStatus: 0
-  },
-  undefined
-]
-*/
       const totalEvenements = evenements.length
 
       for (const [i, ev] of evenements.entries()) {
-        // evenements.forEach(async ev => {
         try {
           const [resultSet] = await rwConnection.query(upsertSql, ev)
           if (resultSet.insertId > 0) {
@@ -417,7 +375,6 @@ export class HorairesImporter extends EventEmitter {
           }
 
           this.emit('progress', i / totalEvenements)
-
         } catch (error) {
           console.error(error)
           throw error
@@ -425,16 +382,16 @@ export class HorairesImporter extends EventEmitter {
       }
 
       if (result.errorMessages.length > 0) {
-        result.status = 422;
+        result.status = 422
         return result
       }
 
-      result.status = 200;
+      result.status = 200
       return result
-
-    } catch (e) {
-      console.error(e)
-      result.error = e;
+    } catch (error) {
+      console.error(error.message)
+      result.errorMessages.push('Impossible de communiquer avec le service LibCal')
+      // result.error = error
       result.status = 500
       throw result
     }
@@ -442,26 +399,24 @@ export class HorairesImporter extends EventEmitter {
 }
 
 function libCalWeeksToEvenement(weeks, evenementTemplate) {
-  const evenements = [];
+  const evenements = []
   weeks.forEach(week => {
     Object.values(week).forEach(day => {
-      const evenement = libCalToHoraire(day);
+      const evenement = libCalToHoraire(day)
       if (evenement) {
         evenements.push({
           ...evenementTemplate,
-          ...evenement
+          ...evenement,
         })
       }
     })
-  });
-  return evenements;
+  })
+  return evenements
 }
 
 function libCalToHoraire(data) {
-  // console.log(JSON.stringify(data, null, 2))
-
   if (data.times.status === 'not-set') {
-    return null;
+    return null
   }
 
   let date = `${data.date}`,
@@ -469,37 +424,29 @@ function libCalToHoraire(data) {
     fin1 = '',
     debut2 = '',
     fin2 = '',
-    sommaire = '';
+    sommaire = ''
 
   if (data.times.status === 'closed') {
-    debut1 = '';
-    fin2 = '';
-    sommaire = 'fermé';
-  }
-
-  else if (data.times.status === 'text') {
-    sommaire = typeof data.times.text !== 'undefined' ? data.times.text : data.times.note;
-  }
-
-  else if (data.times.status === 'open') {
-    debut1 = data.times.hours[0].from;
+    debut1 = ''
+    fin2 = ''
+    sommaire = 'fermé'
+  } else if (data.times.status === 'text') {
+    sommaire = typeof data.times.text !== 'undefined' ? data.times.text : data.times.note
+  } else if (data.times.status === 'open') {
+    debut1 = data.times.hours[0].from
 
     if (data.times.hours.length === 1) {
-      fin2 = data.times.hours[0].to;
+      fin2 = data.times.hours[0].to
       sommaire = `${formatHour(debut1)} à ${formatHour(fin2)}`
     } else {
-      fin1 = data.times.hours[0].to;
-      debut2 = data.times.hours[1].from;
-      fin2 = data.times.hours[1].to;
+      fin1 = data.times.hours[0].to
+      debut2 = data.times.hours[1].from
+      fin2 = data.times.hours[1].to
       sommaire = `${formatHour(debut1)} à ${formatHour(fin1)} et ${formatHour(debut2)} à ${formatHour(fin2)}`
     }
-  }
-
-  else if (data.times.status === 'ByApp') {
+  } else if (data.times.status === 'ByApp') {
     sommaire = 'Sur rendez-vous'
-  }
-
-  else {
+  } else {
     // 24hours
     debut1 = '00:00'
     fin2 = '24:00'
@@ -512,6 +459,6 @@ function libCalToHoraire(data) {
     fin1,
     debut2,
     fin2,
-    sommaire
-  };
+    sommaire,
+  }
 }

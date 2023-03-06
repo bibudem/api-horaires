@@ -1,0 +1,27 @@
+.progress-bar-container {
+  --_height: 3px;
+
+  height: var(--_height);
+}
+
+smart-progress-bar {
+  --smart-primary-rgb: 60, 114, 155;
+  --smart-primary: rgb(var(--smart-primary-rgb));
+  --smart-ui-state-active: var(--smart-primary);
+  --smart-border-radius: 4px;
+  --smart-border-top-left-radius: var(--smart-border-radius);
+  --smart-border-top-right-radius: var(--smart-border-radius);
+  --smart-border-bottom-left-radius: var(--smart-border-radius);
+  --smart-border-bottom-right-radius: var(--smart-border-radius);
+  --smart-border-width: 0;
+
+  display: block;
+  width: 100%;
+  height: var(--_height);
+
+  .smart-container {
+    height: var(--_height);
+    // background-color: #e6e6e6;
+    background-color: #dee7ed;
+  }
+}
