@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     outDir: fileURLToPath(new URL('./app/public/', import.meta.url)),
     rollupOptions: {
-      input: ['src/js/app.js', 'src/scss/main.scss'],
+      input: ['src/js/app.js', 'src/scss/app.scss'],
       output: {
         assetFileNames: 'assets/[name].[ext]',
         chunkFileNames: 'assets/[name].[ext]',

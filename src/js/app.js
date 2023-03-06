@@ -4,7 +4,7 @@ import 'smart-webcomponents/source/smart.element.js'
 import 'smart-webcomponents/source/smart.progressbar.js'
 import spinnerSvg from '../icons/spinner.svg'
 
-import '../scss/main.scss'
+import '../scss/app.scss'
 
 const spinner = (svg => {
   const div = document.createElement('div')
