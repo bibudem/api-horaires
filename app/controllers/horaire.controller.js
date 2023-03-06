@@ -23,6 +23,10 @@ export async function getHoraire(req, res, next) {
   }
 }
 
+function wait(delay = 0) {
+  return new Promise(resolve => setTimeout(resolve, delay))
+}
+
 export async function postImport(req, res, next) {
   const horairesImporter = new HorairesImporter()
 

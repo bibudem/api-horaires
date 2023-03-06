@@ -12,7 +12,7 @@ import console from '../lib/console.js'
 const services = config.get('services')
 const periodes = config.get('periodes')
 
-const upsertSql = `INSERT INTO production (date, bibliotheque, jour, debut1, fin1, debut2, fin2, periode, service, sommaire)
+const upsertSql = `INSERT INTO production (datez, bibliotheque, jour, debut1, fin1, debut2, fin2, periode, service, sommaire)
     VALUES
         ( :date, :bibliotheque, '', :debut1, :fin1, :debut2, :fin2, :periode, :service, :sommaire )
     ON DUPLICATE KEY UPDATE 
@@ -305,12 +305,16 @@ export class HorairesImporter extends EventEmitter {
       errorMessages: [],
     }
 
+    const evenements = []
+
     try {
+      // setTimeout(() => {
+      //   throw new Error('test')
+      // }, 1000)
       const data = await axios.get('https://umontreal.libcal.com/widget/hours/grid?iid=4151&format=json&weeks=52&systemTime=1', { timeout: 10_000 }).then(response => {
         return response.data.locations
       })
 
-      const evenements = []
       const bibs = data.filter(bib => typeof bib.parent_lid === 'undefined')
       const services = data.filter(bib => typeof bib.parent_lid !== 'undefined')
 
@@ -362,7 +366,15 @@ export class HorairesImporter extends EventEmitter {
 
       result.minDate = evenements[0].date
       result.maxDate = evenements[evenements.length - 1].date
+    } catch (error) {
+      console.error(error.message)
+      result.errorMessages.push('Impossible de communiquer avec le service LibCal')
+      // result.error = error
+      result.status = 500
+      throw result
+    }
 
+    try {
       const totalEvenements = evenements.length
 
       for (const [i, ev] of evenements.entries()) {
@@ -389,8 +401,10 @@ export class HorairesImporter extends EventEmitter {
       result.status = 200
       return result
     } catch (error) {
+      console.log(error)
       console.error(error.message)
-      result.errorMessages.push('Impossible de communiquer avec le service LibCal')
+      console.log(error.constructor.name)
+      result.errorMessages = [`Erreur lors du chargement des horaires dans la base de donnée.`]
       // result.error = error
       result.status = 500
       throw result

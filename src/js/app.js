@@ -158,17 +158,20 @@ async function importHoraires() {
       )
     } catch (error) {
       console.log('catch')
+      progressBar.hidden = true
+      progressBar.indeterminate = false
+
       if (error.name === 'AbortError') {
         // Notify the user of abort.
         // Note this will never be a timeout error!
         console.log('Request aborted: %o', error)
+        reject({ errorMessages: ["Le serveur LibCal n'a pu être rejoint dans le délai imparti."] })
       } else {
         // A network error, or some other problem.
         console.log(`Type: ${error.name}, Message: ${error.message}`)
+        reject(error)
       }
-      reject(error)
     } finally {
-      console.log('finally')
       clearTimeout(requestTimeoutHandle)
     }
   })
@@ -222,14 +225,17 @@ submitForm.addEventListener('submit', async event => {
     }
   } catch (error) {
     console.log('catch')
-    if (error.name === 'AbortError') {
-      // Notify the user of abort.
-      // Note this will never be a timeout error!
-      console.log('Request aborted: %o', error)
-    } else {
-      // A network error, or some other problem.
-      console.log(`Type: ${error.name}, Message: ${error.message}`)
-    }
+    console.log(error)
+    resetSubmitBtn()
+    updateStatusMessage('note-danger', `<p>${error.errorMessages.join(' ')}</p>`)
+    // if (error.name === 'AbortError') {
+    //   // Notify the user of abort.
+    //   // Note this will never be a timeout error!
+    //   console.log('Request aborted: %o', error)
+    // } else {
+    //   // A network error, or some other problem.
+    //   console.log(`Type: ${error.name}, Message: ${error.message}`)
+    // }
   }
 })
 
