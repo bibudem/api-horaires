@@ -23,33 +23,33 @@ export async function getHoraire(req, res, next) {
   }
 }
 
-function wait(delay = 0) {
-  return new Promise(resolve => setTimeout(resolve, delay))
-}
-
 export async function postImport(req, res, next) {
   const horairesImporter = new HorairesImporter()
+  let result
 
   horairesImporter.on(
     'progress',
-    throttle(progress => {
-      res.write(`progress:${progress}`)
-    }, 100)
+    throttle(
+      progress => {
+        progress = Math.trunc(progress * 1e4) / 1e2
+        res.write(`progress:${progress}`, () => {
+          if (result) {
+            res.write(`result:${JSON.stringify(result)}`)
+            res.end()
+          }
+        })
+      },
+      100,
+      { trailing: true }
+    )
   )
 
   res.setHeader('Content-Type', 'application/json')
 
   try {
-    const result = await horairesImporter.import()
-
-    res.write(`result:${JSON.stringify(result)}`)
+    result = await horairesImporter.import()
   } catch (error) {
-    console.error('error: ', error)
-
     res.status(error.status).write(`result:${JSON.stringify(error)}`)
-  } finally {
     res.end()
   }
 }
-
-// await postImport()

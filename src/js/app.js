@@ -79,15 +79,40 @@ function updateStatusMessage(statusClass, message) {
 }
 
 function resetSubmitBtn() {
-  spinner.classList.remove('is-rolling')
-  spinner.addEventListener(
-    'transitionend',
-    () => {
+  return new Promise(resolve => {
+    function doResetSubmitBtn() {
       submitBtn.disabled = false
       spinner.remove()
-    },
-    { once: true }
-  )
+    }
+
+    function resetProgressBar() {
+      progressBar.hidden = true
+      progressBar.indeterminate = false
+      progressBar.value = 0
+    }
+
+    spinner.addEventListener('transitionend', doResetSubmitBtn, { once: true })
+
+    spinner.classList.remove('is-rolling')
+
+    if (!progressBar.hidden) {
+      if (!progressBar.indeterminate && progressBar.value > 0) {
+        progressBar.querySelector('.smart-value').addEventListener(
+          'transitionend',
+          () => {
+            resetProgressBar()
+            resolve()
+          },
+          { once: true }
+        )
+      } else {
+        setTimeout(() => {
+          resetProgressBar()
+          resolve()
+        }, 200)
+      }
+    }
+  })
 }
 
 async function closeStatus() {
@@ -104,6 +129,8 @@ async function importHoraires() {
     requestAnimationFrame(() => spinner.classList.add('is-rolling'))
 
     let requestTimeoutHandle
+    let progress = 0
+    let result
 
     try {
       const abortController = new AbortController()
@@ -112,10 +139,8 @@ async function importHoraires() {
       const response = await fetch(submitForm.action, { method: submitForm.method, signal: abortController.signal })
 
       clearTimeout(requestTimeoutHandle)
-      requestTimeoutHandle = setTimeout(() => abortController.abort(), 8000)
 
       const reader = response.body.getReader() // get the response stream
-      let result
 
       progressBar.indeterminate = false
 
@@ -123,8 +148,6 @@ async function importHoraires() {
       while (true) {
         const { done, value } = await reader.read() // value will be the byes of the latest response
         if (done) {
-          progressBar.value = 100
-
           break // exit the loop
         }
 
@@ -133,29 +156,20 @@ async function importHoraires() {
         if (message === 'result') {
           result = JSON.parse(data)
         } else {
-          progressBar.value = Math.trunc(parseFloat(data) * 1e4) / 1e2
+          progress = parseFloat(data)
+          // console.log(progress)
+          progressBar.value = progress
         }
       }
 
       // After the response is done
-      progressBar.querySelector('.smart-value').addEventListener(
-        'transitionend',
-        () => {
-          resetSubmitBtn()
+      await resetSubmitBtn()
 
-          setTimeout(() => {
-            progressBar.hidden = true
-          }, 200)
-
-          if (response.ok) {
-            console.log(`Done! %o`, result)
-            resolve(result)
-          } else {
-            reject(result)
-          }
-        },
-        { once: true }
-      )
+      if (response.ok) {
+        resolve(result)
+      } else {
+        reject(result)
+      }
     } catch (error) {
       console.log('catch')
       progressBar.hidden = true
@@ -204,7 +218,6 @@ submitForm.addEventListener('submit', async event => {
 
   try {
     const result = await importHoraires()
-
     // After the response is done
     if (result.status < 500) {
       let message = '<h3>Importation complétée</h3>'
@@ -226,108 +239,9 @@ submitForm.addEventListener('submit', async event => {
   } catch (error) {
     console.log('catch')
     console.log(error)
-    resetSubmitBtn()
     updateStatusMessage('note-danger', `<p>${error.errorMessages.join(' ')}</p>`)
-    // if (error.name === 'AbortError') {
-    //   // Notify the user of abort.
-    //   // Note this will never be a timeout error!
-    //   console.log('Request aborted: %o', error)
-    // } else {
-    //   // A network error, or some other problem.
-    //   console.log(`Type: ${error.name}, Message: ${error.message}`)
-    // }
   }
 })
-
-// submitForm.addEventListener('submit', async event => {
-//   event.preventDefault()
-//   if (submitBtn.disabled) {
-//     return
-//   }
-
-//   progressBar.hidden = false
-//   progressBar.indeterminate = true
-//   submitBtn.disabled = true
-//   submitBtn.prepend(spinner)
-//   requestAnimationFrame(() => spinner.classList.add('is-rolling'))
-
-//   if (!statusContainer.classList.contains('collapsed')) {
-//     await toggleElement(statusContainer, 'collapsed')
-//     status.innerHTML = ''
-//     status.classList.remove(status._statusClass)
-//     delete status._statusClass
-//   }
-
-//   let requestTimeoutHandle
-
-//   try {
-//     const abortController = new AbortController()
-//     requestTimeoutHandle = setTimeout(() => abortController.abort(), 8000)
-
-//     const response = await fetch(submitForm.action, { method: submitForm.method, signal: abortController.signal })
-
-//     clearTimeout(requestTimeoutHandle)
-//     requestTimeoutHandle = setTimeout(() => abortController.abort(), 8000)
-
-//     const reader = response.body.getReader() // get the response stream
-//     let result
-
-//     progressBar.indeterminate = false
-
-//     // Loop indefinitely while the response comes in (I don't think this is blocking)
-//     while (true) {
-//       const { done, value } = await reader.read() // value will be the byes of the latest response
-//       if (done) {
-//         progressBar.value = 100
-
-//         setTimeout(resetSubmitBtn, 300)
-
-//         setTimeout(() => {
-//           progressBar.hidden = true
-//         }, 250)
-
-//         break // exit the loop
-//       }
-
-//       const { message, data } = decodeMessage(value)
-
-//       if (message === 'result') {
-//         result = JSON.parse(data)
-//       } else {
-//         progressBar.value = Math.trunc(parseFloat(data) * 1e4) / 1e2
-//       }
-//     }
-
-//     // After the response is done
-//     if (response.ok) {
-//       console.log(`Done! %o`, result)
-//       const statusClass = result.status < 500 ? 'note-success' : 'note-danger'
-
-//       let message = `<h3>Importation complétée</h3><p>${result.insertedRows === 0 ? 'Aucun' : n(result.insertedRows)} ${result.insertedRows === 0 ? 'nouvel' : 'nouveaux'} horaire${s(result.insertedRows)} importé${s(result.insertedRows)}. ${result.updatedRows === 0 ? 'Aucun' : n(result.updatedRows)} horaire${s(result.updatedRows)} mise${s(result.updatedRows)} à jour.</p><p>Les horaires traités sont compris entre le ${d(result.minDate)} et le ${d(result.maxDate)} inclusivement.</p>`
-
-//       if (result.errorMessages.length) {
-//         message += `<p class="">${result.errorMessages.join(' ')}</p>`
-//       }
-
-//       setTimeout(() => updateStatusMessage(statusClass, message), 250)
-//     } else {
-//       updateStatusMessage('note-danger', `<p>${result.errorMessages.join(' ')}</p>`)
-//     }
-//   } catch (error) {
-//     console.log('catch')
-//     if (error.name === 'AbortError') {
-//       // Notify the user of abort.
-//       // Note this will never be a timeout error!
-//       console.log('Request aborted: %o', error)
-//     } else {
-//       // A network error, or some other problem.
-//       console.log(`Type: ${error.name}, Message: ${error.message}`)
-//     }
-//   } finally {
-//     console.log('finally')
-//     clearTimeout(requestTimeoutHandle)
-//   }
-// })
 
 // Liste des bibliothèques
 

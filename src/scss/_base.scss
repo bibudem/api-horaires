@@ -39,7 +39,7 @@ h2,
 .h2,
 h1,
 .h1 {
-  font-weight: 300;
+  font-weight: 200;
 }
 
 .table td,
@@ -58,6 +58,7 @@ code {
 
 .submit-btn {
   @extend %widget-state;
+  font-weight: inherit;
 }
 
 .cv-i-spinner-rolling {

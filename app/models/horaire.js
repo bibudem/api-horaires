@@ -12,7 +12,7 @@ import console from '../lib/console.js'
 const services = config.get('services')
 const periodes = config.get('periodes')
 
-const upsertSql = `INSERT INTO production (datez, bibliotheque, jour, debut1, fin1, debut2, fin2, periode, service, sommaire)
+const upsertSql = `INSERT INTO production (date, bibliotheque, jour, debut1, fin1, debut2, fin2, periode, service, sommaire)
     VALUES
         ( :date, :bibliotheque, '', :debut1, :fin1, :debut2, :fin2, :periode, :service, :sommaire )
     ON DUPLICATE KEY UPDATE 
@@ -375,22 +375,17 @@ export class HorairesImporter extends EventEmitter {
     }
 
     try {
-      const totalEvenements = evenements.length
+      const totalEvenements = evenements.length - 1
 
       for (const [i, ev] of evenements.entries()) {
-        try {
-          const [resultSet] = await rwConnection.query(upsertSql, ev)
-          if (resultSet.insertId > 0) {
-            result.insertedRows++
-          } else {
-            result.updatedRows++
-          }
-
-          this.emit('progress', i / totalEvenements)
-        } catch (error) {
-          console.error(error)
-          throw error
+        const [resultSet] = await rwConnection.query(upsertSql, ev)
+        if (resultSet.insertId > 0) {
+          result.insertedRows++
+        } else {
+          result.updatedRows++
         }
+
+        this.emit('progress', i / totalEvenements)
       }
 
       if (result.errorMessages.length > 0) {
@@ -404,10 +399,11 @@ export class HorairesImporter extends EventEmitter {
       console.log(error)
       console.error(error.message)
       console.log(error.constructor.name)
-      result.errorMessages = [`Erreur lors du chargement des horaires dans la base de donnée.`]
-      // result.error = error
-      result.status = 500
-      throw result
+      const errorResult = {
+        status: 500,
+        errorMessages: [`Erreur lors du chargement des horaires dans la base de donnée.`],
+      }
+      throw errorResult
     }
   }
 }
