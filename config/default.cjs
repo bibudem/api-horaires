@@ -17,6 +17,11 @@ module.exports = {
   app: {
     baseUrl: 'https://api.bib.umontreal.ca/horaires',
     port: 8000,
+    sessionOptions: {
+      name: 'api-horaires-sid',
+      resave: false,
+      saveUninitialized: false,
+    },
   },
   ics: {
     ttl: 'P1H',

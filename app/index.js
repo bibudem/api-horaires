@@ -10,6 +10,8 @@ import adminRoute from './routes/admin.route.js'
 import apiRoutes from './routes/api.route.js'
 import importRoute from './routes/import.route.js'
 import assetsRoute from './routes/assets.route.js'
+import connexionRoute from './routes/connexion.route.js'
+import { useAuth } from './middlewares/auth.middleware.js'
 
 const app = express()
 
@@ -38,6 +40,10 @@ app.set('views', './app/views')
 app.locals.basePath = (url => (url.pathname === '/' ? '' : url.pathname))(new URL(config.get('app.baseUrl')))
 app.locals.mode = mode
 
+if (config.get('security.useAuth')) {
+  useAuth(app)
+}
+
 /*
  * Middlewares
  */
@@ -58,13 +64,14 @@ app.use(/^\/admin$/, function (req, res, next) {
 })
 
 app.use(
-  '/admin/' /*, auth.ensureAuthenticated({
-  service: '/connexion/cas'
-})*/,
+  '/admin/',
+  app.ensureAuthenticated({
+    service: '/connexion/cas',
+  }),
   adminRoute
 )
 
-// app.use('/connexion', connexionRoute)
+app.use('/connexion', connexionRoute)
 
 /*
  * Static assets

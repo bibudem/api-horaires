@@ -1,2 +1,2 @@
-module.exports.ensureAuthenticated = require('./ensure-authenticated');
-module.exports.initialize = require('./initialize');
+export * from './ensure-authenticated.js'
+export * from './initialize.js'
