@@ -85,7 +85,14 @@ if (process.env.NODE_ENV.endsWith('production')) {
  * API routes
  */
 
-app.use('/import', importRoute)
+app.use(
+  '/import',
+  cors(),
+  app.ensureAuthenticated({
+    service: '/connexion/jwt',
+  }),
+  importRoute
+)
 
 app.use(cors(), apiRoutes)
 

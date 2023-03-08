@@ -2,6 +2,8 @@ import express from 'express'
 import * as authorization from 'auth-header'
 import config from 'config'
 import jwt from 'jsonwebtoken'
+
+import { createAbilities } from '../authorization/abilities.js'
 import console from '../lib/console.js'
 
 const connexionRoute = express.Router()
@@ -65,11 +67,11 @@ connexionRoute.get('/jwt', (req, res, next) => {
       }
       const user = {
         login: req.user.login,
-        rules: req.createAbilities(req.user).rules,
+        rules: createAbilities(req.user).rules,
         role: req.user.role,
       }
       //
-      console.debug(user)
+      console.debug('user: ', user)
 
       const token = jwt.sign(user, config.get('security.jwt.secretOrKey'), config.get('security.jwt.jsonWebTokenOptions'))
       //res.setHeader('Autorization', `Bearer ${token}`)
