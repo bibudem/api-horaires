@@ -58,7 +58,7 @@
     "sqlstring": "^2.3.3",
     "tinyduration": "^3.2.4",
     "tracer": "^1.1.6",
-    "vite-express": "^0.3.3",
+    "vite-express": "^0.5.1",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
