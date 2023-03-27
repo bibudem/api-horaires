@@ -38,7 +38,7 @@
     "cors": "^2.8.5",
     "es6-template-strings": "^2.0.1",
     "express": "^4.18.2",
-    "express-handlebars": "^7.0.1",
+    "express-handlebars": "^7.0.4",
     "express-session": "^1.17.3",
     "helmet": "^6.0.1",
     "icalendar": "^0.7.1",
