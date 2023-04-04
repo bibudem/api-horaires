@@ -2,6 +2,8 @@ import Button from 'mdb-ui-kit/src/js/free/button.js'
 import Ripple from 'mdb-ui-kit/src/js/free/ripple.js'
 import 'smart-webcomponents/source/smart.element.js'
 import 'smart-webcomponents/source/smart.progressbar.js'
+
+import './status-message.js'
 import spinnerSvg from '../icons/spinner.svg'
 
 import '../scss/app.scss'
@@ -30,52 +32,14 @@ function decodeMessage(value) {
   return /^(?<message>\w+):(?<data>.+)$/.exec(decoder.decode(value)).groups
 }
 
-function toggleElement(elem, collapseClass) {
-  return new Promise(resolve => {
-    // debugger;
-    elem.style.height = ''
-    elem.style.transition = 'none'
-
-    const startHeight = window.getComputedStyle(elem).height
-
-    // Remove the collapse class, and force a layout calculation to get the final height
-    elem.classList.toggle(collapseClass)
-    const height = window.getComputedStyle(elem).height
-
-    // Set the start height to begin the transition
-    elem.style.height = startHeight
-
-    // wait until the next frame so that everything has time to update before starting the transition
-    requestAnimationFrame(() => {
-      elem.style.transition = ''
-
-      requestAnimationFrame(() => {
-        elem.style.height = height
-      })
-    })
-
-    function onTransitionend() {
-      elem.style.height = ''
-      elem.removeEventListener('transitionend', onTransitionend)
-      resolve()
-    }
-
-    // Clear the saved height values after the transition
-    elem.addEventListener('transitionend', onTransitionend)
-  })
-}
-
-function updateStatusMessage(statusClass, message) {
-  if (status._statusClass) {
-    status.classList.remove(status._statusClass)
-  }
-  status.classList.add(statusClass)
-  status._statusClass = statusClass
-  status.innerHTML = '<button type="button" class="btn-close" aria-label="Close"></button>' + message
-
-  if (statusContainer.classList.contains('collapsed')) {
-    toggleElement(statusContainer, 'collapsed')
-  }
+function updateStatusMessage(type, message) {
+  const toast = document.createElement('status-message')
+  toast.role = 'alert'
+  toast.ariaLive = 'assertive'
+  toast.ariaAtomic = 'true'
+  toast.type = type
+  toast.innerHTML = message
+  document.querySelector('.submit-form').after(toast)
 }
 
 function resetSubmitBtn() {
@@ -171,7 +135,6 @@ async function importHoraires() {
         reject(result)
       }
     } catch (error) {
-      console.log('catch')
       progressBar.hidden = true
       progressBar.indeterminate = false
 
@@ -194,26 +157,11 @@ async function importHoraires() {
 const submitForm = document.querySelector('.submit-form')
 const submitBtn = document.querySelector('.submit-btn')
 const progressBar = document.querySelector('#import-progress')
-const statusContainer = document.querySelector('.status-container')
-const status = document.querySelector('.status')
-
-status.addEventListener('click', event => {
-  if (event.target.matches('.btn-close')) {
-    closeStatus()
-  }
-})
 
 submitForm.addEventListener('submit', async event => {
   event.preventDefault()
   if (submitBtn.disabled) {
     return
-  }
-
-  if (!statusContainer.classList.contains('collapsed')) {
-    await toggleElement(statusContainer, 'collapsed')
-    status.innerHTML = ''
-    status.classList.remove(status._statusClass)
-    delete status._statusClass
   }
 
   try {
@@ -229,24 +177,30 @@ submitForm.addEventListener('submit', async event => {
       }
 
       if (result.errorMessages.length) {
-        message += `<p class="">${result.errorMessages.join(' ')}</p>`
+        message += `<p>${result.errorMessages.join(' ')}</p>`
       }
 
-      updateStatusMessage('note-success', message)
+      updateStatusMessage('success', message)
     } else {
-      updateStatusMessage('note-danger', `<p>${result.errorMessages.join(' ')}</p>`)
+      updateStatusMessage('error', `<p>${result.errorMessages.join(' ')}</p>`)
     }
   } catch (error) {
     console.log('catch')
     console.log(error)
-    updateStatusMessage('note-danger', `<p>${error.errorMessages.join(' ')}</p>`)
+    updateStatusMessage('error', `<p>${error.errorMessages.join(' ')}</p>`)
   }
 })
 
 // Liste des bibliothèques
 
 fetch('../liste')
-  .then(response => response.json())
+  .then(async response => {
+    const data = await response.json()
+    if (!response.ok) {
+      throw new Error(data.message)
+    }
+    return data
+  })
   .then(data => {
     const listeBibs = document.querySelector('#liste-bibs')
     for (const key in data) {
@@ -255,6 +209,16 @@ fetch('../liste')
       tr.innerHTML = '<td><code>' + key + '</code></td><td>' + bib + '</td>'
       listeBibs.append(tr)
     }
+  })
+  .catch(async error => {
+    // toast({ html: 'error.message' })
+    const toast = document.createElement('status-message')
+    toast.role = 'alert'
+    toast.ariaLive = 'assertive'
+    toast.ariaAtomic = 'true'
+    toast.type = 'error'
+    toast.innerHTML = `<p>Erreur lors de la récupération de la liste des bibliothèques.</p><p>Message: ${error.message}</p`
+    document.querySelector('.table-responsive').after(toast)
   })
 
 // Liste des
