@@ -1,3 +1,4 @@
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import svg from 'vite-plugin-svgo'
@@ -6,6 +7,11 @@ export default defineConfig({
   build: {
     outDir: fileURLToPath(new URL('./app/public/', import.meta.url)),
     rollupOptions: {
+      plugins: [
+        nodeResolve({
+          exportConditions: ['development'],
+        }),
+      ],
       input: ['src/js/app.js', 'src/scss/app.scss'],
       output: {
         assetFileNames: 'assets/[name].[ext]',

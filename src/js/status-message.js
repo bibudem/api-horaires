@@ -1,6 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit'
 import statusCSS from '../scss/status-message.scss?inline'
-
+console.log(statusCSS)
 class StatusMessage extends LitElement {
   static get properties() {
     return {
@@ -78,7 +78,7 @@ class StatusMessage extends LitElement {
 
   render() {
     return html`<div class="status-container">
-      <div class="status note mb-3"><button type="button" class="btn-close" aria-label="Fermer" @click="${this.close}"></button><slot></slot></div>
+      <div class="status note"><button type="button" class="btn-close" aria-label="Fermer" @click="${this.close}"></button><slot></slot></div>
     </div>
   </div>`
   }
