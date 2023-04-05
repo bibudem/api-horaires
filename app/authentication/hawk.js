@@ -41,7 +41,7 @@ hawk.ensureAuthenticated = function (req, res, next) {
   }
 
   if ('x-forwarded-host' in req.headers) {
-    req.originalUrl = config.get('app.mountPath') + req.originalUrl
+    req.originalUrl = new URL(config.get('app.baseUrl')).pathname + req.originalUrl.slice(1)
     if (!('x-forwarded-proto' in req.headers)) {
       req.headers['x-forwarded-proto'] = 'https'
     }

@@ -5,7 +5,6 @@ module.exports = {
   app: {
     host: 'localhost',
     port: 80,
-    mountPath: '/',
     baseUrl: 'http://localhost',
     sessionOptions: {
       secret: '<long random string>',

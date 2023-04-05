@@ -46,13 +46,14 @@ export function ensureAuthenticated(options) {
   }
   options = options || {}
 
-  var url = options.service || '/connexion'
-  var setReturnTo = options.setReturnTo === undefined ? true : options.setReturnTo
+  const setReturnTo = options.setReturnTo === undefined ? true : options.setReturnTo
 
   return function ensureAuthenticated(req, res, next) {
     if (!config.get('security.useAuth')) {
       return next()
     }
+
+    const url = `${req.app.locals.basePath.slice(0, -1)}${options.service || '/connexion'}`
 
     if (!req.isAuthenticated || !req.isAuthenticated()) {
       console.debug('NOT logged in.')
@@ -74,8 +75,9 @@ export function ensureAuthenticated(options) {
       if (setReturnTo && req.session) {
         req.session.returnTo = req.originalUrl || req.url
       }
-      console.debug('redirecting to (relative) ' + url)
-      return res.redirect.relative(url)
+
+      console.debug('redirecting to ' + url)
+      return res.redirect(url)
     }
     console.debug('IS logged in.')
     next()

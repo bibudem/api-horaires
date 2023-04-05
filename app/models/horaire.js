@@ -3,7 +3,6 @@ import axios from 'axios'
 import { DateTime } from 'luxon'
 import config from 'config'
 import codeBibs from 'code-bib'
-import nodeGlobalProxy from 'node-global-proxy'
 import { connection, rwConnection } from '../db/index.js'
 import { formatHour } from '../lib/dateTime-utils.js'
 import { toICS } from '../lib/to-ICS.js'
@@ -23,17 +22,6 @@ const upsertSql = `INSERT INTO production (date, bibliotheque, jour, debut1, fin
         periode = :periode,
         sommaire = :sommaire;
 `
-
-const proxy = nodeGlobalProxy.default
-
-// Setting up proxy if needed
-
-if (config.get('httpClient.proxy')) {
-  console.debug('Using proxy settings')
-
-  proxy.setConfig(config.get('httpClient.proxy'))
-  proxy.start()
-}
 
 const bibLabels = new Map()
 const servicesLabels = new Map()

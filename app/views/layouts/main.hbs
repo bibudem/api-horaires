@@ -10,13 +10,13 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100;8..144,200;8..144,300;8..144,400;8..144,500&family=Roboto+Mono&display=swap" rel="stylesheet">{{#ifEquals mode 'production' }}
-  <link href="{{basePath}}/assets/app.css" rel="stylesheet">{{/ifEquals}}
+  <link href="{{basePath}}assets/app.css" rel="stylesheet">{{/ifEquals}}
 </head>
 
 <body>
   {{{body}}}{{#ifEquals mode 'production' }}
-  <script type="module" src="{{basePath}}/assets/app.js"></script>{{else}}
-  <script type="module" src="/src/js/app.js"></script>{{/ifEquals}}
+  <script type="module" src="{{basePath}}assets/app.js"></script>{{else}}
+  <script type="module" src="{{basePath}}src/js/app.js"></script>{{/ifEquals}}
 
 </body>
 

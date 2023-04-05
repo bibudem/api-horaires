@@ -1,4 +1,5 @@
 import express from 'express'
+import nodeGlobalProxy from 'node-global-proxy'
 import ViteExpress from 'vite-express'
 import { engine } from 'express-handlebars'
 import cors from 'cors'
@@ -12,6 +13,17 @@ import importRoute from './routes/import.route.js'
 import assetsRoute from './routes/assets.route.js'
 import connexionRoute from './routes/connexion.route.js'
 import { useAuth } from './middlewares/auth.middleware.js'
+
+const proxy = nodeGlobalProxy.default
+
+// Setting up proxy if needed
+
+if (config.get('httpClient.proxy')) {
+  console.debug(`Using proxy settings to ${config.get('httpClient.proxy')}`)
+
+  proxy.setConfig(config.get('httpClient.proxy'))
+  proxy.start()
+}
 
 const app = express()
 
@@ -37,7 +49,7 @@ app.engine(
 )
 app.set('view engine', 'hbs')
 app.set('views', './app/views')
-app.locals.basePath = (url => (url.pathname === '/' ? '' : url.pathname))(new URL(config.get('app.baseUrl')))
+app.locals.basePath = new URL(config.get('app.baseUrl')).pathname
 app.locals.mode = mode
 
 if (config.get('security.useAuth')) {

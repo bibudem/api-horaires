@@ -85,7 +85,8 @@ export class Strategy extends passport.Strategy {
           return
         }
         return verified(new Error('Authentication failed'))
-      } catch (e) {
+      } catch (error) {
+        console.error(error)
         return verified(new Error('Authentication failed'))
       }
     })
@@ -157,6 +158,16 @@ export class Strategy extends passport.Strategy {
       })
     }
 
+    console.log(
+      url.format({
+        pathname: this.parsed.pathname + _validateUri,
+        query: {
+          ticket: ticket,
+          service: service,
+        },
+      })
+    )
+
     this.client
       .get(
         {
@@ -174,6 +185,7 @@ export class Strategy extends passport.Strategy {
       )
 
       .on('error', function (e) {
+        console.error(e)
         return self.fail(new Error(e))
       })
   }
