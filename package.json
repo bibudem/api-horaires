@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@bibudem/api-communs": "^1.5.0",
-    "@casl/ability": "^6.3.3",
+    "@casl/ability": "^6.4.0",
     "@remillc/web-logger": "^0.1.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "auth-header": "^1.0.0",
