@@ -199,14 +199,34 @@ fetch('../liste')
     if (!response.ok) {
       throw new Error(data.message)
     }
-    return data
+
+    const ret = []
+
+    for (const [key, label] of Object.entries(data)) {
+      ret.push({ key, label })
+    }
+
+    ret.sort((a, b) => {
+      const labelA = a.label.toUpperCase() // ignore upper and lowercase
+      const labelB = b.label.toUpperCase() // ignore upper and lowercase
+      if (labelA < labelB) {
+        return -1
+      }
+      if (labelA > labelB) {
+        return 1
+      }
+
+      // names must be equal
+      return 0
+    })
+
+    return ret
   })
   .then(data => {
     const listeBibs = document.querySelector('#liste-bibs')
-    for (const key in data) {
-      const bib = data[key]
+    for (const bib of data) {
       const tr = document.createElement('tr')
-      tr.innerHTML = '<td><code>' + key + '</code></td><td>' + bib + '</td>'
+      tr.innerHTML = '<td>' + bib.label + '</td><td><code>' + bib.key + '</code></td>'
       listeBibs.append(tr)
     }
   })
@@ -226,11 +246,18 @@ fetch('../liste')
 fetch('../services')
   .then(response => response.json())
   .then(data => {
+    const ret = []
+    for (const service of Object.values(data)) {
+      ret.push(service)
+    }
+
+    return ret.sort((a, b) => a.order - b.order)
+  })
+  .then(data => {
     const listeServices = document.querySelector('#liste-services')
-    for (const key in data) {
-      const service = data[key]
+    for (const service of data) {
       const tr = document.createElement('tr')
-      tr.innerHTML = '<td><code>' + key + '</code></td><td>' + service.label + '</td>'
+      tr.innerHTML = '<td>' + service.label + '</td><td><code>' + service.key + '</code></td>'
       listeServices.append(tr)
     }
   })
