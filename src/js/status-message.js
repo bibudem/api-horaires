@@ -1,6 +1,6 @@
 import { LitElement, html, unsafeCSS } from 'lit'
 import statusCSS from '../scss/status-message.scss?inline'
-console.log(statusCSS)
+
 class StatusMessage extends LitElement {
   static get properties() {
     return {
