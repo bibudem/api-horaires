@@ -2,6 +2,8 @@
 
 Service REST pour les heures d'ouverture des Bibliothèques de l'Université de Montréal
 
+https://bibudem.stoplight.io/docs/api-horaires
+
 ## Liste des codes de périodes
 
 La liste peut être consultée en tout temps à l’adresse :
