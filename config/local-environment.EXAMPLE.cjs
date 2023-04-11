@@ -6,7 +6,7 @@ module.exports = {
     host: 'localhost',
     port: 80,
     mountPath: '/',
-    baseUrl: 'http://localhost',
+    baseUrl: 'http://localhost/',
     sessionOptions: {
       secret: '<long random string>',
     },
