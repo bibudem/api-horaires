@@ -42,42 +42,47 @@ function updateStatusMessage(type, message) {
   document.querySelector('.submit-form').after(toast)
 }
 
-function resetSubmitBtn() {
+function resetProgressBar() {
   return new Promise(resolve => {
-    function doResetSubmitBtn() {
-      submitBtn.disabled = false
-      spinner.remove()
-    }
-
-    function resetProgressBar() {
+    function doResetProgressBar() {
       progressBar.hidden = true
       progressBar.indeterminate = false
       progressBar.value = 0
     }
-
-    spinner.addEventListener('transitionend', doResetSubmitBtn, { once: true })
-
-    spinner.classList.remove('is-rolling')
 
     if (!progressBar.hidden) {
       if (!progressBar.indeterminate && progressBar.value > 0) {
         progressBar.querySelector('.smart-value').addEventListener(
           'transitionend',
           () => {
-            resetProgressBar()
+            doResetProgressBar()
             resolve()
           },
           { once: true }
         )
       } else {
         setTimeout(() => {
-          resetProgressBar()
+          doResetProgressBar()
           resolve()
         }, 200)
       }
     } else {
       resolve()
     }
+  })
+}
+
+function resetSubmitBtn() {
+  return new Promise(resolve => {
+    function doResetSubmitBtn() {
+      submitBtn.disabled = false
+      spinner.remove()
+      resolve()
+    }
+
+    spinner.addEventListener('transitionend', doResetSubmitBtn, { once: true })
+
+    spinner.classList.remove('is-rolling')
   })
 }
 
@@ -100,7 +105,7 @@ async function importHoraires() {
       const response = await fetch(submitForm.action, { method: submitForm.method, signal: abortController.signal })
 
       // After the response is done
-      await resetSubmitBtn()
+      // resetSubmitBtn()
 
       clearTimeout(requestTimeoutHandle)
 
@@ -120,11 +125,12 @@ async function importHoraires() {
         if (message === 'result') {
           result = JSON.parse(data)
         } else {
-          progress = parseFloat(data)
-          // console.log(progress)
-          progressBar.value = progress
+          progressBar.value = parseFloat(data)
         }
       }
+
+      // Progress is finished
+      await Promise.all([resetProgressBar(), resetSubmitBtn()])
 
       if (response.ok) {
         resolve(result)
@@ -133,10 +139,7 @@ async function importHoraires() {
       }
     } catch (error) {
       // After the response is done
-      progressBar.hidden = true
-      progressBar.indeterminate = false
-
-      await resetSubmitBtn()
+      await Promise.all([resetProgressBar(), resetSubmitBtn()])
 
       if (error.name === 'AbortError') {
         // Notify the user of abort.
@@ -167,7 +170,7 @@ submitForm.addEventListener('submit', async event => {
   try {
     const result = await importHoraires()
     // After the response is done
-    if (result.status < 500) {
+    if (result.status < 300) {
       let message = '<h3>Importation complétée</h3>'
 
       message += `<p>${result.insertedRows === 0 ? 'Aucun' : n(result.insertedRows)} ${result.insertedRows === 0 ? 'nouvel' : 'nouveaux'} horaire${s(result.insertedRows)} importé${s(result.insertedRows)}. ${result.updatedRows === 0 ? 'Aucun' : n(result.updatedRows)} horaire${s(result.updatedRows)} mise${s(result.updatedRows)} à jour.</p>`

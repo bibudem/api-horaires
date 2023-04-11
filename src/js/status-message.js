@@ -25,15 +25,6 @@ class StatusMessage extends LitElement {
     })
   }
 
-  // attributeChangedCallback(name, oldValue, newValue) {
-  //   console.log(`${name} attribute value changed from ${oldValue} to ${newValue}`)
-  //   const status = this.renderRoot.querySelector('.status')
-  //   if (oldValue) {
-  //     status.classList.remove(`note-${oldValue}`)
-  //   }
-  //   status.classList.add(`note-${newValue}`)
-  // }
-
   async close() {
     await this.toggle('collapsed')
   }

@@ -76,8 +76,12 @@ code {
 status-message {
   h3 {
     font-size: calc(1.1667em + 0.6vw);
-    font-weight: bold;
-    margin-bottom: 1.2em;
+    font-weight: 400;
+    margin-bottom: 1em;
+  }
+
+  p {
+    margin-bottom: 0.8333em;
   }
 
   & > :last-child {
