@@ -75,13 +75,10 @@ function resetSubmitBtn() {
           resolve()
         }, 200)
       }
+    } else {
+      resolve()
     }
   })
-}
-
-async function closeStatus() {
-  await toggleElement(statusContainer, 'collapsed')
-  status.innerHTML = ''
 }
 
 async function importHoraires() {
@@ -102,11 +99,14 @@ async function importHoraires() {
 
       const response = await fetch(submitForm.action, { method: submitForm.method, signal: abortController.signal })
 
+      // After the response is done
+      await resetSubmitBtn()
+
       clearTimeout(requestTimeoutHandle)
 
-      const reader = response.body.getReader() // get the response stream
-
       progressBar.indeterminate = false
+
+      const reader = response.body.getReader() // get the response stream
 
       // Loop indefinitely while the response comes in (I don't think this is blocking)
       while (true) {
@@ -126,23 +126,23 @@ async function importHoraires() {
         }
       }
 
-      // After the response is done
-      await resetSubmitBtn()
-
       if (response.ok) {
         resolve(result)
       } else {
         reject(result)
       }
     } catch (error) {
+      // After the response is done
       progressBar.hidden = true
       progressBar.indeterminate = false
+
+      await resetSubmitBtn()
 
       if (error.name === 'AbortError') {
         // Notify the user of abort.
         // Note this will never be a timeout error!
         console.log('Request aborted: %o', error)
-        reject({ errorMessages: ["Le serveur LibCal n'a pu être rejoint dans le délai imparti."] })
+        reject({ errorMessages: ["Le serveur LibCal n'a pu être rejoint dans le délai prévu."] })
       } else {
         // A network error, or some other problem.
         console.log(`Type: ${error.name}, Message: ${error.message}`)

@@ -1,15 +1,11 @@
-/**
- * Cas
- */
-import url from 'url'
-
-import http from 'http'
-import https from 'https'
+import { URL } from 'node:url'
+import http from 'node:http'
+import https from 'node:https'
 import { parseString } from 'xml2js'
-import processors from 'xml2js/lib/processors.js'
 import passport from 'passport'
-import { getRoleForGroup } from '../authorization/abilities.js'
+import processors from 'xml2js/lib/processors.js'
 
+import { getRoleForGroup } from '../authorization/abilities.js'
 import console from '../lib/console.js'
 
 const xmlParseOpts = {
@@ -34,11 +30,10 @@ export class Strategy extends passport.Strategy {
     }
 
     this.ssoBase = options.ssoBaseURL
-    this.serverBaseURL = options.serverBaseURL
+    this.appBaseURL = options.appBaseURL
     this.validateURL = options.validateURL
-    this.serviceURL = options.serviceURL
     this.useSaml = options.useSaml || false
-    this.parsed = url.parse(this.ssoBase)
+    this.parsed = new URL(this.ssoBase)
 
     if (this.parsed.protocol === 'http:') {
       this.client = http
@@ -85,23 +80,21 @@ export class Strategy extends passport.Strategy {
           return
         }
         return verified(new Error('Authentication failed'))
-      } catch (e) {
+      } catch (error) {
+        console.error(error)
         return verified(new Error('Authentication failed'))
       }
     })
   }
 
   service(req) {
-    var serviceURL = this.serviceURL || req.originalUrl
-    console.debug(`this.serviceURL: ${this.serviceURL}`)
+    var serviceURL = req.originalUrl
     console.debug(`req.originalUrl: ${req.originalUrl}`)
-    console.debug(`serviceURL: ${serviceURL}`)
-    var resolvedURL = url.resolve(this.serverBaseURL, '.' + serviceURL)
-    var parsedURL = url.parse(resolvedURL, true)
-    console.debug('# ' + parsedURL.href)
-    delete parsedURL.query.ticket
-    delete parsedURL.search
-    return url.format(parsedURL)
+    const url = new URL('.' + serviceURL, this.appBaseURL)
+    url.hash = ''
+    url.search = ''
+
+    return url.href
   }
 
   authenticate(req, options) {
@@ -122,17 +115,17 @@ export class Strategy extends passport.Strategy {
     //console.log(service)
     const ticket = req.query.ticket
     if (!ticket) {
-      var redirectURL = url.parse(this.ssoBase + '/login.ashx', true)
+      const redirectURL = new URL(this.ssoBase + '/login.ashx')
+      redirectURL.searchParams.append('service', service)
 
-      redirectURL.query.service = service
       // copy loginParams in login query
       for (var property in options.loginParams) {
         var loginParam = options.loginParams[property]
         if (loginParam) {
-          redirectURL.query[property] = loginParam
+          redirectURL.searchParams.append(property, loginParam)
         }
       }
-      return this.redirect(url.format(redirectURL))
+      return this.redirect(redirectURL.href)
     }
 
     const verified = function (err, user, info) {
@@ -157,23 +150,16 @@ export class Strategy extends passport.Strategy {
       })
     }
 
+    const url = new URL(this.parsed)
+    url.pathname = url.pathname + _validateUri
+    url.searchParams.append('ticket', ticket)
+    url.searchParams.append('service', service)
+
     this.client
-      .get(
-        {
-          host: this.parsed.hostname,
-          port: this.parsed.port,
-          path: url.format({
-            pathname: this.parsed.pathname + _validateUri,
-            query: {
-              ticket: ticket,
-              service: service,
-            },
-          }),
-        },
-        _handleResponse
-      )
+      .get(url, _handleResponse)
 
       .on('error', function (e) {
+        console.error(e)
         return self.fail(new Error(e))
       })
   }

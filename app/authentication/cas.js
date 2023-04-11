@@ -11,7 +11,7 @@ cas.strategy = new Strategy(
   {
     version: 'CAS3.0',
     ssoBaseURL: 'https://identification.umontreal.ca/cas',
-    serverBaseURL: config.get('app.baseUrl'),
+    appBaseURL: config.get('app.baseUrl'),
   },
   // This is the `verify` callback
   function (user, done) {
