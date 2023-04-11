@@ -789,7 +789,7 @@
         "description": "Indique si on veut uniquement les bibliothèques ouvertes pendant la période demandée."
       },
       "bibs": {
-        "name": "bibs",
+        "name": "bib",
         "in": "query",
         "required": false,
         "schema": {
