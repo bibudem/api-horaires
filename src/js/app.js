@@ -14,7 +14,7 @@ const spinner = (svg => {
   return div.firstChild
 })(spinnerSvg)
 
-const decoder = new TextDecoder() // This will convert the Uint8Array of bytes into ASCII text
+const decoder = new TextDecoder('utf-8', { fatal: true }) // This will convert the Uint8Array of bytes into ASCII text
 
 const n = new Intl.NumberFormat('fr-CA').format
 
@@ -29,7 +29,14 @@ function s(n) {
 }
 
 function decodeMessage(value) {
-  return /^(?<message>\w+):(?<data>.+)$/.exec(decoder.decode(value)).groups
+  try {
+    const str = decoder.decode(value)
+    console.log('str: %o', str)
+    return /^(?<message>\w+):(?<data>.+)$/.exec(str).groups
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 
 function updateStatusMessage(type, message) {
@@ -168,9 +175,15 @@ submitForm.addEventListener('submit', async event => {
   }
 
   try {
+    const statusMessageElem = document.querySelector('status-message')
+
+    if (statusMessageElem) {
+      await statusMessageElem.close()
+    }
+
     const result = await importHoraires()
     // After the response is done
-    console.dir(result)
+
     if (result.status < 500) {
       let message = '<h3>Importation terminée</h3>'
 
