@@ -34,8 +34,10 @@ export async function postImport(req, res, next) {
         progress = Math.trunc(progress * 1e4) / 1e2
         res.write(`progress:${progress}`, () => {
           if (result) {
-            res.write(`result:${JSON.stringify(result)}`)
-            res.end()
+            process.nextTick(() => {
+              res.write(`result:${JSON.stringify(result)}`)
+              res.end()
+            })
           }
         })
       },
