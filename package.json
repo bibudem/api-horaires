@@ -1,6 +1,6 @@
 {
   "name": "api-horaires",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "description": "Service REST pour les heures d'ouvertures des services de la Direction des bibliothèques, Université de Montréal",
   "type": "module",
   "scripts": {
