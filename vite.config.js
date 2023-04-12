@@ -7,11 +7,11 @@ export default defineConfig({
   build: {
     outDir: fileURLToPath(new URL('./app/public/', import.meta.url)),
     rollupOptions: {
-      plugins: [
-        nodeResolve({
-          exportConditions: ['development'],
-        }),
-      ],
+      // plugins: [
+      //   nodeResolve({
+      //     exportConditions: ['development'],
+      //   }),
+      // ],
       input: ['src/js/app.js', 'src/scss/app.scss'],
       output: {
         assetFileNames: 'assets/[name].[ext]',

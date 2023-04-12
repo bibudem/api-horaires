@@ -31,7 +31,6 @@ function s(n) {
 function decodeMessage(value) {
   try {
     const str = decoder.decode(value)
-    console.log('str: %o', str)
     return /^(?<message>\w+):(?<data>.+)$/.exec(str).groups
   } catch (error) {
     console.error(error)
@@ -138,7 +137,7 @@ async function importHoraires() {
 
       // Progress is finished
       await Promise.all([resetProgressBar(), resetSubmitBtn()])
-      console.log('result: ', result)
+
       if (response.ok) {
         resolve(result)
       } else {

@@ -25,6 +25,7 @@ export async function getHoraire(req, res, next) {
 
 export async function postImport(req, res, next) {
   const horairesImporter = new HorairesImporter()
+  const throttleWait = 100
   let result
 
   horairesImporter.on(
@@ -37,11 +38,11 @@ export async function postImport(req, res, next) {
             setTimeout(() => {
               res.write(`result:${JSON.stringify(result)}`)
               res.end()
-            }, 100)
+            }, throttleWait)
           }
         })
       },
-      100,
+      throttleWait,
       { trailing: true }
     )
   )
