@@ -170,6 +170,7 @@ submitForm.addEventListener('submit', async event => {
   try {
     const result = await importHoraires()
     // After the response is done
+    console.dir(result)
     if (result.status < 500) {
       let message = '<h3>Importation terminée</h3>'
 
