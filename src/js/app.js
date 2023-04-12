@@ -170,7 +170,7 @@ submitForm.addEventListener('submit', async event => {
   try {
     const result = await importHoraires()
     // After the response is done
-    if (result.status < 300) {
+    if (result.status < 500) {
       let message = '<h3>Importation complétée</h3>'
 
       message += `<p>${result.insertedRows === 0 ? 'Aucun' : n(result.insertedRows)} ${result.insertedRows === 0 ? 'nouvel' : 'nouveaux'} horaire${s(result.insertedRows)} importé${s(result.insertedRows)}. ${result.updatedRows === 0 ? 'Aucun' : n(result.updatedRows)} horaire${s(result.updatedRows)} mise${s(result.updatedRows)} à jour.</p>`

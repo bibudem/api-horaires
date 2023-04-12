@@ -23,8 +23,6 @@ export class Strategy extends passport.Strategy {
       options = {}
     }
 
-    console.log(options)
-
     if (!verify) {
       throw new Error('cas authentication strategy requires a verify function')
     }

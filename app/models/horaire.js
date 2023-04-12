@@ -1,4 +1,5 @@
 import { EventEmitter } from 'node:events'
+import nodeGlobalProxy from 'node-global-proxy'
 import axios from 'axios'
 import { DateTime } from 'luxon'
 import config from 'config'
@@ -7,6 +8,14 @@ import { connection, rwConnection } from '../db/index.js'
 import { formatHour } from '../lib/dateTime-utils.js'
 import { toICS } from '../lib/to-ICS.js'
 import console from '../lib/console.js'
+
+const proxy = nodeGlobalProxy.default
+const useProxy = !!config.get('httpClient.proxy')
+
+if (useProxy) {
+  console.debug(`Using proxy settings to ${config.get('httpClient.proxy')}`)
+  proxy.setConfig(config.get('httpClient.proxy'))
+}
 
 const services = config.get('services')
 const periodes = config.get('periodes')
@@ -299,9 +308,18 @@ export class HorairesImporter extends EventEmitter {
       // setTimeout(() => {
       //   throw new Error('test')
       // }, 1000)
+
+      if (useProxy) {
+        proxy.start()
+      }
+
       const data = await axios.get('https://umontreal.libcal.com/widget/hours/grid?iid=4151&format=json&weeks=52&systemTime=1', { timeout: 10_000 }).then(response => {
         return response.data.locations
       })
+
+      if (useProxy) {
+        proxy.stop()
+      }
 
       const bibs = data.filter(bib => typeof bib.parent_lid === 'undefined')
       const services = data.filter(bib => typeof bib.parent_lid !== 'undefined')
