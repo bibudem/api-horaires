@@ -131,7 +131,7 @@ async function importHoraires() {
 
       // Progress is finished
       await Promise.all([resetProgressBar(), resetSubmitBtn()])
-
+      console.log('result: ', result)
       if (response.ok) {
         resolve(result)
       } else {
