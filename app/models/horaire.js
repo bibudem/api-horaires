@@ -310,14 +310,16 @@ export class HorairesImporter extends EventEmitter {
       // }, 1000)
 
       if (useProxy) {
+        console.log('Starting proxy...')
         proxy.start()
       }
 
-      const data = await axios.get('https://umontreal.libcal.com/widget/hours/grid?iid=4151&format=json&weeks=52&systemTime=1', { timeout: 10_000 }).then(response => {
+      const data = await axios.get('https://umontreal.libcal.com/widget/hours/grid?iid=4151&format=json&weeks=52&systemTime=1', { timeout: 10_000, proxy: false }).then(response => {
         return response.data.locations
       })
 
       if (useProxy) {
+        console.log('Stopping proxy...')
         proxy.stop()
       }
 
@@ -374,7 +376,7 @@ export class HorairesImporter extends EventEmitter {
       result.maxDate = evenements[evenements.length - 1].date
     } catch (error) {
       console.error(error.message)
-      result.errorMessages.push('Impossible de communiquer avec le service LibCal')
+      result.errorMessages.push(`Impossible de communiquer avec le service LibCal: ${error.message}`)
       // result.error = error
       result.status = 500
       throw result

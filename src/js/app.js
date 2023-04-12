@@ -188,8 +188,7 @@ submitForm.addEventListener('submit', async event => {
       updateStatusMessage('error', `<p>${result.errorMessages.join(' ')}</p>`)
     }
   } catch (error) {
-    console.log('catch')
-    console.log(error)
+    console.dir(error)
     updateStatusMessage('error', `<p>${error.errorMessages.join(' ')}</p>`)
   }
 })
