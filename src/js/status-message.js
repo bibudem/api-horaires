@@ -17,12 +17,6 @@ class StatusMessage extends LitElement {
 
   constructor() {
     super()
-
-    this.updateComplete.then(() => {
-      if (this.type) {
-        this.renderRoot.querySelector('.status').classList.add(`note-${this.type}`)
-      }
-    })
   }
 
   async close() {
@@ -69,7 +63,7 @@ class StatusMessage extends LitElement {
 
   render() {
     return html`<div class="status-container">
-      <div class="status note"><button type="button" class="btn-close" aria-label="Fermer" @click="${this.close}"></button><slot></slot></div>
+      <div class="status"><button type="button" class="btn-close" aria-label="Fermer" @click="${this.close}"></button><slot></slot></div>
     </div>
   </div>`
   }
