@@ -46,7 +46,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^3.3.0",
     "memorystore": "^1.6.7",
-    "mysql2": "^3.2.0",
+    "mysql2": "^3.3.1",
     "node-global-proxy": "^1.0.1",
     "original-url": "^1.2.3",
     "passport": "^0.6.0",
