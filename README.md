@@ -8,21 +8,21 @@ Utiliser node v16.17.0
 
 Dupliquer les fichiers de configuration suivants.
 
-```
+```Shell
 config/local-environment.EXAMPLE.cjs
 config/users.EXAMPLE.cjs
 ```
 
 vers:
 
-```
+```Shell
 config/local.cjs
 config/users.cjs
 ```
 
 Pour un développement en préproduction ou en production, il est préférable d'employer un suffixe approprié pour le fichier de configurations locales, par exemple:
 
-```
+```Shell
 config/local-production.cjs
 ```
 
