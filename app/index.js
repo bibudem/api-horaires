@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import express from 'express'
 import ViteExpress from 'vite-express'
 import { engine } from 'express-handlebars'
@@ -54,6 +55,7 @@ app.use(
     logDirectory: config.get('log.dir'),
   })
 )
+
 
 /*
  * Admin UI

@@ -7,7 +7,7 @@
     "build": "npm-run-all build:vite compress",
     "build:vite": "vite build",
     "compress": "gzipper compress --brotli --brotli-quality 11 --gzip --gzip-level 9 app/public",
-    "dev": "nodemon --watch config --watch app --ext js,cjs,mjs,json",
+    "dev": "cross-env NODE_ENV=development nodemon --watch config --watch app --ext js,cjs,mjs,json",
     "preview": "cross-env NODE_ENV=production npm run dev",
     "vite": "vite"
   },
