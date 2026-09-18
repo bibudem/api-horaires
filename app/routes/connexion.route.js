@@ -150,9 +150,7 @@ connexionRoute.get('/unauthorized', function (req, res) {
     auth_failed: 'L’authentification a échoué. Veuillez réessayer.',
   }
   const message = req.query.message || defaultMessages[code] || defaultMessages.unauthorized_user
-  const extraContactMessage = message.includes('Si vous pensez qu’il s’agit d’une erreur')
-    ? ''
-    : '<p>Si vous pensez qu’il s’agit d’une erreur, veuillez contacter le service informatique de la bibliothèque.</p>'
+  const extraContactMessage = message.includes('Si vous pensez qu’il s’agit d’une erreur') ? '' : '<p>Si vous pensez qu’il s’agit d’une erreur, veuillez contacter le service informatique de la bibliothèque.</p>'
 
   const html = `
     <!doctype html>
@@ -173,7 +171,7 @@ connexionRoute.get('/unauthorized', function (req, res) {
           <h1>Accès refusé</h1>
           <p>${message}</p>
           ${extraContactMessage}
-          <p><a href="/connexion">Retour à la page de connexion</a></p>
+          <p><a href="../connexion">Retour à la page de connexion</a></p>
         </div>
       </body>
     </html>
