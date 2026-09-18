@@ -59,7 +59,7 @@ export class Strategy extends passport.Strategy {
         var success = result.serviceresponse.authenticationsuccess
         if (success) {
           const user = {
-            login: success.user,
+            login: String(success.user).replace(/^.*[\\/]/, ''),
             expiration: success.expiration,
             signature: success.signature,
           }
