@@ -1,17 +1,17 @@
 import config from 'config'
 
 import { Strategy } from './passport-cas.js'
-import { getRoleForGroup } from '../authorization/abilities.js'
-
 import console from '../lib/console.js'
 
 const cas = {}
+const ssoBaseURL = config.get('security.ssoBaseURL')
+const appBaseURL = config.get('app.baseUrl')
 
 cas.strategy = new Strategy(
   {
     version: 'CAS3.0',
-    ssoBaseURL: 'https://identification.umontreal.ca/cas',
-    appBaseURL: config.get('app.baseUrl'),
+    ssoBaseURL,
+    appBaseURL,
   },
   // This is the `verify` callback
   function (user, done) {
@@ -20,14 +20,20 @@ cas.strategy = new Strategy(
 )
 
 cas.ensureAuthenticated = function (req, res, next) {
-  function authenticatedSuccess(user) {
-    console.debug(`cas authenticated, user: ${arguments}`)
-    req.user = req.user || {}
-    //req.user.role = 'client';
-    req.user.role = getRoleForGroup(user)
+  function authenticatedSuccess(err, user, info) {
+    if (err) return next(err)
+    if (!user) {
+      console.warn('CAS authentication failed: ' + JSON.stringify(info))
+      return res.status(401).send('Unauthorized')
+    }
+    if (!user.role) {
+      console.warn('CAS user has no authorized role: ' + JSON.stringify(user))
+      return res.status(403).send('Forbidden')
+    }
+    req.user = user
     next()
   }
-  req._passport.instance.authenticate('cas')(req, res, authenticatedSuccess)
+  req._passport.instance.authenticate('cas', { session: true }, authenticatedSuccess)(req, res, next)
 }
 
 export default cas

@@ -5,7 +5,7 @@ import { parseString } from 'xml2js'
 import passport from 'passport'
 import processors from 'xml2js/lib/processors.js'
 
-import { getRoleForGroup } from '../authorization/abilities.js'
+import { getRoleFor, getRoleForGroup } from '../authorization/abilities.js'
 import console from '../lib/console.js'
 
 const xmlParseOpts = {
@@ -63,12 +63,19 @@ export class Strategy extends passport.Strategy {
             expiration: success.expiration,
             signature: success.signature,
           }
+
           if (success.groupes) {
             user.groups = success.groupes.split('|')
-            user.role = getRoleForGroup(user)
           }
 
-          console.debug(`user.role: ${user.role}`)
+          const roleFromLogin = getRoleFor(user, true)
+          const roleFromGroup = getRoleForGroup(user, true)
+          const role = roleFromLogin || roleFromGroup
+          if (!role) {
+            console.warn(`Unauthorized CAS user: ${JSON.stringify(user)}`)
+            return verified(null, false, { message: 'unauthorized_user' })
+          }
+          user.role = role
 
           if (self._passReqToCallback) {
             self._verify(req, user, verified)
@@ -87,7 +94,6 @@ export class Strategy extends passport.Strategy {
 
   service(req) {
     var serviceURL = req.originalUrl
-    console.debug(`req.originalUrl: ${req.originalUrl}`)
     const url = new URL('.' + serviceURL, this.appBaseURL)
     url.hash = ''
     url.search = ''

@@ -49,6 +49,7 @@ module.exports = {
   services,
   additionnalEndpoints: ['chat'],
   security: {
+    ssoBaseURL: 'https://identification.umontreal.ca/cas',
     useAuth: true,
     roles: Object.keys(abilities),
     abilities,
