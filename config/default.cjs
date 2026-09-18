@@ -45,8 +45,9 @@ module.exports = {
   httpClient: {
     proxy: 'http://mandataire.ti.umontreal.ca:80',
   },
-  services,
   periodes,
+  services,
+  additionnalEndpoints: ['chat'],
   security: {
     useAuth: true,
     roles: Object.keys(abilities),
